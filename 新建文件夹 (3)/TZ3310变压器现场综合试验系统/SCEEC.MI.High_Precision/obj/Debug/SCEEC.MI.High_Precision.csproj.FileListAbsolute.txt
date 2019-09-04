@@ -1,0 +1,6 @@
+C:\Users\My\Desktop\SCEEC\TZ3310变压器现场综合试验系统\SCEEC.MI.High_Precision\bin\Debug\SCEEC.MI.High_Precision.dll
+C:\Users\My\Desktop\SCEEC\TZ3310变压器现场综合试验系统\SCEEC.MI.High_Precision\bin\Debug\SCEEC.MI.High_Precision.pdb
+C:\Users\My\Desktop\SCEEC\TZ3310变压器现场综合试验系统\SCEEC.MI.High_Precision\obj\Debug\SCEEC.MI.High_Precision.csprojAssemblyReference.cache
+C:\Users\My\Desktop\SCEEC\TZ3310变压器现场综合试验系统\SCEEC.MI.High_Precision\obj\Debug\SCEEC.MI.High_Precision.csproj.CoreCompileInputs.cache
+C:\Users\My\Desktop\SCEEC\TZ3310变压器现场综合试验系统\SCEEC.MI.High_Precision\obj\Debug\SCEEC.MI.High_Precision.dll
+C:\Users\My\Desktop\SCEEC\TZ3310变压器现场综合试验系统\SCEEC.MI.High_Precision\obj\Debug\SCEEC.MI.High_Precision.pdb

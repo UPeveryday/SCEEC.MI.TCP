@@ -1,0 +1,182 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using SCEEC.Numerics;
+
+namespace SCEEC.MI.TZ3310
+{
+    public static class MeasurementInterface
+    {
+
+         static  ClassTz3310 TZ3310 = new ClassTz3310();
+        public static MeasurementResult DoMeasurement(ref MeasurementItemStruct mi, Transformer transformer)
+        {
+            switch (mi.Function)
+            {
+                case MeasurementFunction.DCInsulation:
+                    switch(mi.state)
+                    {
+                        case 0:
+                            byte[] TestKindData = TZ3310.SetPraJydz(mi.Winding.ToJYDZstation(), Parameter.JYDZVoilt._5_0KV, 50, 50, 130, 0);
+                            Thread.Sleep(100);
+                            TZ3310.StartTest(TestKindData);
+                            mi.stateText = "绝缘电阻";
+                            mi.state++;
+                            Thread.Sleep(4000);
+                            break;
+                        case 1:
+                            string[] Recbuffer = TZ3310.ReadTestData(Parameter.TestKind.绝缘电阻);
+                            if(Recbuffer!=null)
+                            {
+                                if (Recbuffer[Recbuffer.Length - 1] == "0")
+                                    mi.Result = MeasurementResult.NewDCInsulationResult(mi, NumericsConverter.Text2Value(Recbuffer[0]), NumericsConverter.Text2Value(Recbuffer[1]),
+                                        NumericsConverter.Text2Value(Recbuffer[2]), null, false);
+                                else if (Recbuffer[Recbuffer.Length - 1] == "1")
+                                {
+                                    mi.Result = MeasurementResult.NewDCInsulationResult(mi, null, NumericsConverter.Text2Value(Recbuffer[0]),
+                                       NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[2]), true);
+                                  //  mi.state++;
+                                    mi.completed = true;
+                                    // mi.state++;
+                                    mi.stateText = "读取绝缘电阻结果成功";
+
+
+                                }
+                                else
+                                {
+                                    mi.failed = true;
+                                    mi.stateText = Recbuffer[0].ToString();
+                                }
+                            }
+                            break;
+                      
+                    }
+                    break;
+                case MeasurementFunction.Capacitance:
+
+
+                    break;
+                case MeasurementFunction.DCResistance://直流电阻
+                    if (mi.Terimal != null)
+                    {
+                        
+                    }
+                    else
+                    {
+
+                    }
+                    break;
+                case MeasurementFunction.BushingDCInsulation:
+                    switch (mi.state)
+                    {
+                        case 0:
+                            byte[] TestKindData = TZ3310.SetPraJydz(mi.Winding.ToJYDZstation(), Parameter.JYDZVoilt._2_5KV, 50, 50, 130, 0);
+                            Thread.Sleep(100);
+                            TZ3310.StartTest(TestKindData);
+                            mi.stateText = "末屏O";
+                            mi.state++;
+                            Thread.Sleep(4000);
+                            break;
+                        case 1:
+                            string[] Recbuffer = TZ3310.ReadTestData(Parameter.TestKind.绝缘电阻);
+                            if (Recbuffer != null)
+                            {
+                                if (Recbuffer[Recbuffer.Length - 1] == "0")
+                                    mi.Result = MeasurementResult.NewDCInsulationResult(mi, NumericsConverter.Text2Value(Recbuffer[0]), NumericsConverter.Text2Value(Recbuffer[1]),
+                                        NumericsConverter.Text2Value(Recbuffer[2]), null, false);
+                                else if (Recbuffer[Recbuffer.Length - 1] == "1")
+                                {
+                                    mi.Result = MeasurementResult.NewDCInsulationResult(mi, null, NumericsConverter.Text2Value(Recbuffer[0]),
+                                       NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[2]), true);
+                                    mi.state++;
+                                    mi.completed = true;
+                                    // mi.state++;
+                                    mi.stateText = "末屏O";
+                                    Thread.Sleep(2000);
+
+
+                                }
+                                else
+                                {
+                                    mi.failed = true;
+                                    mi.stateText = Recbuffer[0].ToString();
+                                }
+                            }
+                            break;
+                        case 3:
+                            byte[] TestKindDataA = TZ3310.SetPraJydz(Parameter.JYDZstation.高压套管A, Parameter.JYDZVoilt._2_5KV, 50, 50, 130, 0);
+                            Thread.Sleep(100);
+                            TZ3310.StartTest(TestKindDataA);
+                            mi.stateText = "末屏A";
+                            mi.state++;
+                            Thread.Sleep(4000);
+                            break;
+                        case 4:
+                            string[] RecbufferA = TZ3310.ReadTestData(Parameter.TestKind.绝缘电阻);
+                            if (RecbufferA != null)
+                            {
+                                if (RecbufferA[RecbufferA.Length - 1] == "0")
+                                    mi.Result = MeasurementResult.NewDCInsulationResult(mi, NumericsConverter.Text2Value(RecbufferA[0]), NumericsConverter.Text2Value(RecbufferA[1]),
+                                        NumericsConverter.Text2Value(RecbufferA[2]), null, false);
+                                else if (RecbufferA[RecbufferA.Length - 1] == "1")
+                                {
+                                    mi.Result = MeasurementResult.NewDCInsulationResult(mi, null, NumericsConverter.Text2Value(RecbufferA[0]),
+                                       NumericsConverter.Text2Value(RecbufferA[1]), NumericsConverter.Text2Value(RecbufferA[2]), true);
+                                    mi.state++;
+                                    mi.completed = true;
+                                    // mi.state++;
+                                    mi.stateText = "末屏O";
+                                    Thread.Sleep(2000);
+
+
+                                }
+                                else
+                                {
+                                    mi.failed = true;
+                                    mi.stateText = RecbufferA[0].ToString();
+                                }
+                            }
+                            break;
+
+
+                    }
+                    break;
+                case MeasurementFunction.BushingCapacitance:
+
+                    break;
+                case MeasurementFunction.OLTCSwitchingCharacter:
+
+                    break;
+                case MeasurementFunction.DCCharge://充电
+
+                    break;
+                case MeasurementFunction.Description:
+                    mi.completed = true;
+                    break;
+            }
+           // MeasurementResult t;
+            return null;
+        }
+
+        public static void DoWork(ref TestingWorkerSender sender)
+        {
+            DoMeasurement(ref sender.MeasurementItems[sender.CurrentItemIndex], sender.Transformer);
+            sender.StatusText = sender.MeasurementItems[sender.CurrentItemIndex].stateText;
+            if (sender.MeasurementItems[sender.CurrentItemIndex].completed) sender.CurrentItemIndex++;
+            Thread.Sleep(800);
+        }
+
+
+        public static void CancelWork(ref TestingWorkerSender sender)
+        {
+
+        }
+    }
+}
+

@@ -1,0 +1,66 @@
+﻿using SCEEC.MI.TZ3310;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace SCEEC.TTM
+{
+    /// <summary>
+    /// TestingInfoWindow.xaml 的交互逻辑
+    /// </summary>
+    public partial class TestingInfoWindow : Window
+    {
+        public int state = 0;
+        public double oilTemperature;
+
+        public TestingInfoWindow(TestingWorkerSender sender)
+        {
+            InitializeComponent();
+            MeasurementItemsListBox.ItemsSource = sender.GetList();
+        }
+
+        private void TextBlock_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (!Microsoft.VisualBasic.Information.IsNumeric((OilTemperature.Text)))
+            {
+                MessageBox.Show("油温为非数值参数!", "试验参数管理器");
+                OilTemperature.Focus();
+            }
+        }
+
+        private void OKButton_Click(object sender, RoutedEventArgs e)
+        {
+            oilTemperature = Double.Parse(OilTemperature.Text);
+            state = 1;
+            this.DialogResult = true;
+            this.Close();
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            state = 2;
+            this.DialogResult = false;
+            this.Close();
+        }
+
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (this.WindowState != WindowState.Normal)
+            {
+                this.WindowState = WindowState.Normal;
+                this.Top = 0;
+            }
+            this.DragMove();
+        }
+    }
+}

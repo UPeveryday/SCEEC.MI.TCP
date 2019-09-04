@@ -1,0 +1,80 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using SCEEC.Numerics;
+
+namespace SCEEC.MI.TZ3310
+{
+
+    
+    
+    
+
+    public static class MeasurementInterface
+    {
+         static  ClassTz3310 TZ3310 = new ClassTz3310();
+        public static MeasurementResult DoMeasurement(ref MeasurementItemStruct mi, Transformer transformer)
+        {
+            switch (mi.Function)
+            {
+                case MeasurementFunction.DCInsulation:
+                    
+                   if(true==TZ3310.StartTest(TZ3310.SetPraJydz(Parameter.JYDZstation.高压绕组, Parameter.JYDZVoilt._5_0KV, 50, 130, 1, 0)))
+                    {
+                        string[] Recbuffer = TZ3310.ReadTestData(Parameter.TestKind.绝缘电阻);
+                    }
+
+                    break;
+                case MeasurementFunction.Capacitance:
+
+
+                    break;
+                case MeasurementFunction.DCResistance://直流电阻
+                    if (mi.Terimal != null)
+                    {
+                        
+                    }
+                    else
+                    {
+
+                    }
+                    break;
+                case MeasurementFunction.BushingDCInsulation:
+
+                    break;
+                case MeasurementFunction.BushingCapacitance:
+
+                    break;
+                case MeasurementFunction.OLTCSwitchingCharacter:
+
+                    break;
+                case MeasurementFunction.DCCharge://充电
+
+                    break;
+                case MeasurementFunction.Description:
+                    mi.completed = true;
+                    break;
+            }
+           // MeasurementResult t;
+            return null;
+        }
+
+        public static void DoWork(ref TestingWorkerSender sender)
+        {
+            if (sender.Results == null) sender.Results = new List<MeasurementResult>();
+            sender.Results.Add(DoMeasurement(ref sender.MeasurementItems[sender.CurrentItemIndex], sender.Transformer));
+            if (sender.MeasurementItems[sender.CurrentItemIndex].completed) sender.CurrentItemIndex++;
+        }
+
+        public static void CancelWork(ref TestingWorkerSender sender)
+        {
+
+        }
+    }
+}
+

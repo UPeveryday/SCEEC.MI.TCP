@@ -1,0 +1,207 @@
+﻿<Window x:Class="SCEEC.TTM.WindowTesting"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SCEEC.TTM"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:WPF.UI="clr-namespace:ZdfFlatUI;assembly=WPF.UI"
+        mc:Ignorable="d"
+        Style="{DynamicResource WizardForm}"
+        Title="变压器现场综合测试系统管理器"  Icon="icon.ico"
+        Height="700" Width="1200" 
+        WindowStartupLocation="CenterScreen" 
+        WindowState ="Maximized"
+        MinWidth="1200" MinHeight="700"  
+        FontSize="18" 
+        StateChanged="Window_StateChanged">
+    <Window.Resources>
+        
+    </Window.Resources>
+    <Grid Margin="5,0,5,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="Resources/icon.png" Height="20" Grid.Column="0" Margin="5"/>
+            <TextBlock Text="TZ3310变压器现场综合测试系统" Grid.Column="1" Margin="5" Height="20" Style="{DynamicResource Title}"/>
+            <Button x:Name="minimumButton" Grid.Column="3" Height="35" Click="MinimumButton_Click">
+                <Image Source="Resources/minimum.png" Margin="10"/>
+            </Button>
+            <Button x:Name="maximumButton" Grid.Column="4" Height="35" Click="MaximumButton_Click">
+                <Image x:Name="maximumButtonImage" Source="Resources/maximum2.png" Margin="10"/>
+            </Button>
+            <Button x:Name="closeButton" Grid.Column="5" Height="35" Click="CloseButton_Click">
+                <Image Source="Resources/close.png" Margin="10"/>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="试验列表" Grid.Column="0" Margin="5,5,10,5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="TestItemListBox" Grid.Row="0" Margin="5"/>
+                    <Grid Grid.Row="1" Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="剩余试验数量:" Grid.Row="0" Grid.Column="0" Margin="5"/>
+                        <TextBlock x:Name="RemainingTestNumLabel" Text="0" Grid.Row="0" Grid.Column="1" Margin="5"/>
+                        <TextBlock Text="试验进度百分比:" Grid.Row="1" Grid.Column="0" Margin="5"/>
+                        <WrapPanel Grid.Row="1" Grid.Column="1">
+                            <TextBlock x:Name="ProgressPercentLabel" Text="{Binding Path=Value, ElementName=progressBar}" Margin="5"/>
+                            <TextBlock Text="%" Margin="0,5,5,5"/>
+                        </WrapPanel>
+                    </Grid>
+                    <ProgressBar x:Name="progressBar" Height="20" Grid.Row="2" Background="#FF252526" Foreground="#FF8ED28A" BorderThickness="1" Margin="5"/>
+
+                </Grid>
+            </GroupBox>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="0.75*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <GroupBox Header="实时测量" Grid.Row="0" Grid.ColumnSpan="2" Margin="5">
+                    <Grid x:Name="MeasurementPanelGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.05*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="DashboardTitle1" Text="" Visibility="Hidden"/>
+                        <TextBlock x:Name="DashboardValue1" Text="0" Visibility="Hidden"/>
+                        <TextBlock x:Name="DashboardUnit1" Text="" Visibility="Hidden"/>
+                        <TextBlock x:Name="DashboardTitle2" Text="" Visibility="Hidden"/>
+                        <TextBlock x:Name="DashboardValue2" Text="0" Visibility="Hidden"/>
+                        <TextBlock x:Name="DashboardUnit2" Text="" Visibility="Hidden"/>
+                        <WPF.UI:Dashboard x:Name="dashboard1" Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   LongTickCount="9" Maximum="10" ShortTickCount="5" Skin="Flow"
+                                   Value="0" Grid.Column="1">
+                            <WPF.UI:Dashboard.ContentTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,85,0,0" HorizontalAlignment="Center" Orientation="Vertical">
+                                        <TextBlock FontSize="18" Margin="0,4" Text="{Binding Path=Text, ElementName=DashboardTitle1}" TextAlignment="Center" />
+                                        <TextBlock Margin="0,4" HorizontalAlignment="Center" FontSize="26" Foreground="White"
+                                           Text="{Binding Path=Text,
+                                                          ElementName=DashboardValue1}" />
+                                        <TextBlock Margin="0,4" HorizontalAlignment="Center" FontSize="18" Text="{Binding Path=Text, ElementName=DashboardUnit1}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </WPF.UI:Dashboard.ContentTemplate>
+                        </WPF.UI:Dashboard>
+                        <WPF.UI:Dashboard x:Name="dashboard2" Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   LongTickCount="9" Maximum="10" ShortTickCount="5" Skin="Flow"
+                                   Value="0" Grid.Column="2">
+                            <WPF.UI:Dashboard.ContentTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,85,0,0" HorizontalAlignment="Center" Orientation="Vertical">
+                                        <TextBlock FontSize="18" Margin="0,4" Text="{Binding Path=Text, ElementName=DashboardTitle2}" TextAlignment="Center" />
+                                        <TextBlock Margin="0,4" HorizontalAlignment="Center" FontSize="26" Foreground="White"
+                                           Text="{Binding Path=Text,
+                                                          ElementName=DashboardValue2}" />
+                                        <TextBlock Margin="0,4" HorizontalAlignment="Center" FontSize="18" Text="{Binding Path=Text, ElementName=DashboardUnit2}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </WPF.UI:Dashboard.ContentTemplate>
+                        </WPF.UI:Dashboard>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="试验结果" Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Margin="5">
+                    <DataGrid Margin="5">
+                        <DataGrid.Style>
+                            <Style TargetType="DataGrid">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Style>
+                        </DataGrid.Style>
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FF1C1C1C"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#FF3F3F46"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                    </DataGrid>
+                </GroupBox>
+                <GroupBox Header="试验控制" Grid.Row="2" Grid.Column="1" Margin="5">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.2*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="0.4*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="0.2*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="0.25*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="StartButton"  CornerRadius="20" Background="DarkGreen" BorderBrush="LightGray" BorderThickness="1" Grid.Row="1" Grid.Column="1" MouseLeftButtonUp="StartButton_Click">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="0.7"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="启动测量" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32"/>
+                        </Border>
+                        <Border x:Name="StopButton" CornerRadius="20" Background="DarkRed" BorderBrush="LightGray" BorderThickness="1" Grid.Row="3" Grid.Column="1" MouseLeftButtonUp="StopButton_Click">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Opacity" Value="0.7"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="立即停止" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32"/>
+                        </Border>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="工作状态" Grid.Row="1" Grid.Column="1" Margin="5">
+                    <TextBlock x:Name="WorkingStatusLabel" Text="等待启动测量" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="LightSkyBlue" FontSize="36"/>
+                </GroupBox>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

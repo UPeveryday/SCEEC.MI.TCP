@@ -1,0 +1,15 @@
+C:\Users\My\Desktop\mvvm\Mvvm\bin\Debug\Mvvm.exe.config
+C:\Users\My\Desktop\mvvm\Mvvm\bin\Debug\Mvvm.exe
+C:\Users\My\Desktop\mvvm\Mvvm\bin\Debug\Mvvm.pdb
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\Mvvm.csprojAssemblyReference.cache
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\MainWindow.g.cs
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\App.g.cs
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\Mvvm_MarkupCompile.cache
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\Mvvm_MarkupCompile.lref
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\MainWindow.baml
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\Mvvm.g.resources
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\Mvvm.Properties.Resources.resources
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\Mvvm.csproj.GenerateResource.cache
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\Mvvm.csproj.CoreCompileInputs.cache
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\Mvvm.exe
+C:\Users\My\Desktop\mvvm\Mvvm\obj\Debug\Mvvm.pdb

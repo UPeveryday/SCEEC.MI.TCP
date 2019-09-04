@@ -1,0 +1,265 @@
+﻿<Window x:Class="SCEEC.TTM.TransformerSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SCEEC.TTM"
+        mc:Ignorable="d"
+        Style="{DynamicResource WizardForm}"
+        Title="TransformerSettingWindow" Height="600" Width="750" FontSize="18" MinWidth="750" MinHeight="600" Closing="Window_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="Resources/transformer.png" Height="20" Grid.Column="0" Margin="5"/>
+            <TextBlock x:Name="TitleTextBlock" Text="变压器" Grid.Column="1" Margin="5" Style="{DynamicResource Title}"/>
+            <Button x:Name="minimumButton" Grid.Column="2" Height="35" Click="MinimumButton_Click">
+                <Image Source="Resources/minimum.png" Margin="10"/>
+            </Button>
+            <Button x:Name="maximumButton" Grid.Column="3" Height="35" Click="MaximumButton_Click">
+                <Image x:Name="maximumButtonImage" Source="Resources/maximum.png" Margin="10"/>
+            </Button>
+            <Button x:Name="closeButton" Grid.Column="4" Height="35" Click="CloseButton_Click">
+                <Image Source="Resources/close.png" Margin="10"/>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="变压器主体" Grid.Row="0">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="0.1*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Text="出厂序号: " Grid.Row="0" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="SerialNoTextBox" Grid.Row="0" Grid.Column="1" Margin="5" TextChanged="TextChanged" LostKeyboardFocus="SerialNoTextBox_LostKeyboardFocus"  InputMethod.IsInputMethodEnabled="False"/>
+                    <TextBlock Text="变压器类型: " Grid.Row="1" Grid.Column="0" Margin="5"/>
+                    <WrapPanel Grid.Row="1" Grid.Column="1" Margin="2">
+                        <ComboBox x:Name="PhaseComboBox" SelectionChanged="PhaseComboBox_SelectionChanged">
+                            <ComboBoxItem Content="单相"/>
+                            <ComboBoxItem Content="三相" IsSelected="True"/>
+                        </ComboBox>
+                        <ComboBox x:Name="WindingNumComboBox" SelectionChanged="WindingNumComboBox_SelectionChanged">
+                            <ComboBoxItem Content="双绕组"/>
+                            <ComboBoxItem Content="三绕组" IsSelected="True"/>
+                        </ComboBox>
+                        <TextBlock Text="变压器" Margin="2.5"/>
+                    </WrapPanel>
+                    <TextBlock Text="额定频率: " Grid.Row="2" Grid.Column="0" Margin="5"/>
+                    <WrapPanel Grid.Row="2" Grid.Column="1">
+                        <ComboBox x:Name="RatingFrequencyComboBox" Margin="2" SelectionChanged="TextChanged">
+                            <ComboBoxItem Content="50 Hz" IsSelected="true"/>
+                            <ComboBoxItem Content="60 Hz"/>
+                        </ComboBox>
+                    </WrapPanel>
+                    <TextBlock Text="联结组标号:" Grid.Row="3" Grid.Column="0" Margin="5"/>
+                    <WrapPanel Grid.Row="3" Grid.Column="1" Margin="2.5">
+                        <ComboBox x:Name="HvWindingConfigComboBox" SelectionChanged="TextChanged">
+                            <ComboBoxItem Content="YN" IsSelected="True"/>
+                            <ComboBoxItem Content="Y"/>
+                            <ComboBoxItem Content="D"/>
+                        </ComboBox>
+                        <ComboBox x:Name="MvWindingConfigComboBox" SelectionChanged="TextChanged">
+                            <ComboBoxItem Content="yn" IsSelected="True"/>
+                            <ComboBoxItem Content="y"/>
+                            <ComboBoxItem Content="d"/>
+                        </ComboBox>
+                        <ComboBox x:Name="MvWindingLabelComboBox" SelectionChanged="TextChanged">
+                            <ComboBoxItem Content="0" IsSelected="True"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                            <ComboBoxItem Content="6"/>
+                            <ComboBoxItem Content="7"/>
+                            <ComboBoxItem Content="8"/>
+                            <ComboBoxItem Content="9"/>
+                            <ComboBoxItem Content="10"/>
+                            <ComboBoxItem Content="11"/>
+                        </ComboBox>
+                        <ComboBox x:Name="LvWindingConfigComboBox" SelectionChanged="TextChanged">
+                            <ComboBoxItem Content="yn"/>
+                            <ComboBoxItem Content="y"/>
+                            <ComboBoxItem Content="d" IsSelected="True"/>
+                        </ComboBox>
+                        <ComboBox x:Name="LvWindingLabelComboBox" SelectionChanged="TextChanged">
+                            <ComboBoxItem Content="0"/>
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                            <ComboBoxItem Content="6"/>
+                            <ComboBoxItem Content="7"/>
+                            <ComboBoxItem Content="8"/>
+                            <ComboBoxItem Content="9"/>
+                            <ComboBoxItem Content="10"/>
+                            <ComboBoxItem Content="11" IsSelected="True"/>
+                        </ComboBox>
+                    </WrapPanel>
+                    <TextBlock Text="额定电压: " Grid.Row="4" Grid.Column="0" Margin="5"/>
+                    <WrapPanel Grid.Row="4" Grid.Column="1" Margin="5">
+                        <TextBox x:Name="HvVoltageRatingTextBox" Text="220" Width="40" TextChanged="TextChanged"/>
+                        <TextBlock Text=" / "/>
+                        <TextBox x:Name="MvVoltageRatingTextBox" Text="110" Width="40" TextChanged="TextChanged"/>
+                        <TextBlock x:Name="LvVoltageRatingLabel" Text=" / "/>
+                        <TextBox x:Name="LvVoltageRatingTextBox" Text="35" Width="40" TextChanged="TextChanged"/>
+                        <TextBlock Text=" kV"/>
+                    </WrapPanel>
+                    <TextBlock Text="额定容量: " Grid.Row="5" Grid.Column="0" Margin="5"/>
+                    <WrapPanel Grid.Row="5" Grid.Column="1" Margin="5">
+                        <TextBox x:Name="HvPowerRatingTextBox" Text="240" Width="40" TextChanged="TextChanged"/>
+                        <TextBlock Text=" / "/>
+                        <TextBox x:Name="MvPowerRatingTextBox" Text="240" Width="40" TextChanged="TextChanged"/>
+                        <TextBlock x:Name="LvPowerRatingLabel" Text=" / "/>
+                        <TextBox x:Name="LvPowerRatingTextBox" Text="120" Width="40" TextChanged="TextChanged"/>
+                        <TextBlock Text=" MVA"/>
+                    </WrapPanel>
+                    <TextBlock Text="位置: " Grid.Row="0" Grid.Column="3" Margin="5"/>
+                    <ComboBox x:Name="locationComboBox" Grid.Row="0" Grid.Column="4" Margin="2" SelectionChanged="TextChanged"/>
+                    <TextBlock Text="型号: " Grid.Row="1" Grid.Column="3" Margin="5"/>
+                    <TextBox x:Name="ApparatusIDTextBox" Grid.Row="1" Grid.Column="4" Margin="5" TextChanged="TextChanged"/>
+                    <TextBlock Text="生产厂商: " Grid.Row="2" Grid.Column="3" Margin="5"/>
+                    <TextBox x:Name="ManufacturerTextBox" Grid.Row="2" Grid.Column="4" Margin="5" TextChanged="TextChanged"/>
+                    <TextBlock Text="生产年月: " Grid.Row="3" Grid.Column="3" Margin="5"/>
+                    <TextBox x:Name="ProductionYearTextBox" Grid.Row="3" Grid.Column="4" Margin="5" TextChanged="TextChanged"/>
+                    <TextBlock Text="资产号: " Grid.Row="4" Grid.Column="3" Margin="5"/>
+                    <TextBox x:Name="AssetSystemCodeTextBox" Grid.Row="4" Grid.Column="4" Margin="5" TextChanged="TextChanged"/>
+                    
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="套管" Grid.Row="1">
+                <WrapPanel Margin="5">
+                    <CheckBox x:Name="HvBushingCheckBox" Content="高压侧" Height="25" Margin="5,5,20,5" Checked="TextChanged" Unchecked="TextChanged"/>
+                    <CheckBox x:Name="MvBushingCheckBox" Content="中压侧" Height="25" Margin="20,5,20,5" Checked="TextChanged" Unchecked="TextChanged"/>
+                </WrapPanel>
+            </GroupBox>
+            <GroupBox Header="有载分接" Grid.Row="2">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <WrapPanel Margin="5,5,20,5" Grid.Row="0" Grid.Column="0">
+                        <CheckBox x:Name= "OLTCCheckBox" Content="具有 有载分接开关" Height="25" Checked="OLTCCheckBox_Checked" Unchecked="OLTCCheckBox_Unchecked"/>
+                        <WrapPanel x:Name="OLTCMainTapWrapPanel">
+                            <TextBlock Text=":  具有"/>
+                            <TextBox x:Name="OLTCTapMainNumTextBox" Text="1" Width="30" TextAlignment="Right" Margin="5,0,5,0" PreviewTextInput="OLTCTapMainNumTextBox_PreviewTextInput" LostKeyboardFocus="OLTCTapMainNumTextBox_LostKeyboardFocus"/>
+                            <TextBlock Text="个主分接"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                    <Grid x:Name="OLTCGrid" Grid.Row="1" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1.1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="分接开关位置：" Grid.Row="1" Grid.Column="0" Margin="5"/>
+                        <WrapPanel Grid.Row="1" Grid.Column="1">
+                            <ComboBox x:Name="OLTCWindingComboBox" Margin="2.5" SelectionChanged="TextChanged">
+                                <ComboBoxItem Content="高压侧" IsSelected="True"/>
+                                <ComboBoxItem Content="中压侧"/>
+                                <ComboBoxItem x:Name ="LVOLTCComboBoxItem"  Content="低压侧"/>
+                            </ComboBox>
+                        </WrapPanel>
+                        <TextBlock Text="分接范围：" Grid.Row="2" Grid.Column="0" Margin="5"/>
+                        <WrapPanel Grid.Row="2" Grid.Column="1">
+                            <TextBlock Text="±" Margin="5,5,0,5"/>
+                            <ComboBox x:Name="OLTCTapNumComboBox" Margin="2.5" SelectionChanged="OLTCTapNumComboBox_SelectionChanged">
+                                <ComboBoxItem Content="1"/>
+                                <ComboBoxItem Content="2"/>
+                                <ComboBoxItem Content="4"/>
+                                <ComboBoxItem Content="5"/>
+                                <ComboBoxItem Content="8" IsSelected="True"/>
+                                <ComboBoxItem Content="10"/>
+                            </ComboBox>
+                            <TextBlock Text="×" Margin="0,5,0,5"/>
+                            <ComboBox x:Name="OLTCStepComboBox" Margin="2.5" SelectionChanged="TextChanged">
+                                <ComboBoxItem Content="0.50%"/>
+                                <ComboBoxItem Content="1.00%"/>
+                                <ComboBoxItem Content="1.25%" IsSelected="True"/>
+                                <ComboBoxItem Content="2.00%"/>
+                                <ComboBoxItem Content="2.50%"/>
+                                <ComboBoxItem Content="5.00%"/>
+                                <ComboBoxItem Content="10.0%"/>
+                            </ComboBox>
+                            <TextBlock Text="kV" Margin="5"/>
+                        </WrapPanel>
+                        <TextBlock Text="出厂序号: " Grid.Row="0" Grid.Column="0" Margin="5"/>
+                        <TextBox x:Name="OLTCSerialNoTextBox" Grid.Row="0" Grid.Column="1" Margin="5" TextChanged="TextChanged"/>
+                        <TextBlock Text="型号: " Grid.Row="0" Grid.Column="3" Margin="5"/>
+                        <TextBox x:Name="OLTCModelTypeTextBox" Grid.Row="0" Grid.Column="4" Margin="5" TextChanged="TextChanged"/>
+                        <TextBlock Text="生产厂商: " Grid.Row="1" Grid.Column="3" Margin="5"/>
+                        <TextBox x:Name="OLTCManufacturerTextBox" Grid.Row="1" Grid.Column="4" Margin="5" TextChanged="TextChanged"/>
+                        <TextBlock Text="生产年月: " Grid.Row="2" Grid.Column="3" Margin="5"/>
+                        <TextBox x:Name="OLTCProductionYearTextBox" Grid.Row="2" Grid.Column="4" Margin="5" TextChanged="TextChanged"/>
+                    </Grid>
+                    
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="LossPanelButton" Grid.Column="0" Click="LossPanelButton_Click" Visibility="Collapsed">
+                <TextBlock Text="负载损耗及短路阻抗参数设置" Margin="20,10,20,10"/>
+            </Button>
+            <Button x:Name="OilPanelButton" Grid.Column="1" Visibility="Collapsed">
+                <TextBlock Text="温升参数设置" Margin="20,10,20,10"/>
+            </Button>
+            <Button x:Name="OKButton" Grid.Column="3" Click="OKButton_Click">
+                <TextBlock Text="确定" Margin="20,10,20,10"/>
+            </Button>
+            <Button x:Name="CancelButton" Grid.Column="4" Click="CancelButton_Click">
+                <TextBlock Text="取消" Margin="20,10,20,10"/>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

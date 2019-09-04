@@ -1,0 +1,72 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\上海思创TZ3310变压器综合试验系统\\Desktop\\TZ3310变压器现场综合试验系统\\DrawFile\\DrawFile.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\上海思创TZ3310变压器综合试验系统\\Desktop\\TZ3310变压器现场综合试验系统\\DrawFile\\DrawFile.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\上海思创TZ3310变压器综合试验系统\\Desktop\\TZ3310变压器现场综合试验系统\\DrawFile\\DrawFile.csproj",
+        "projectName": "DrawFile",
+        "projectPath": "C:\\Users\\上海思创TZ3310变压器综合试验系统\\Desktop\\TZ3310变压器现场综合试验系统\\DrawFile\\DrawFile.csproj",
+        "packagesPath": "C:\\Users\\上海思创TZ3310变压器综合试验系统\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\上海思创TZ3310变压器综合试验系统\\Desktop\\TZ3310变压器现场综合试验系统\\DrawFile\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft SDKs\\UWPNuGetPackages\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\上海思创TZ3310变压器综合试验系统\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "uap10.0.15063"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "uap10.0.15063": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "uap10.0.15063": {
+          "dependencies": {
+            "Microsoft.NETCore.UniversalWindowsPlatform": {
+              "target": "Package",
+              "version": "[6.2.8, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win10-arm": {
+          "#import": []
+        },
+        "win10-arm-aot": {
+          "#import": []
+        },
+        "win10-arm64-aot": {
+          "#import": []
+        },
+        "win10-x64": {
+          "#import": []
+        },
+        "win10-x64-aot": {
+          "#import": []
+        },
+        "win10-x86": {
+          "#import": []
+        },
+        "win10-x86-aot": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

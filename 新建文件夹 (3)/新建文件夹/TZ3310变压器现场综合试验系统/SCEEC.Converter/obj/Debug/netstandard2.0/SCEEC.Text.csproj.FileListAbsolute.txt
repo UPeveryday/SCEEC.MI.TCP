@@ -1,0 +1,9 @@
+C:\Users\Slivy\source\repos\TZ3310变压器现场综合试验系统\SCEEC.Text\obj\Debug\netstandard2.0\SCEEC.Text.csprojAssemblyReference.cache
+C:\Users\Slivy\source\repos\TZ3310变压器现场综合试验系统\SCEEC.Text\obj\Debug\netstandard2.0\SCEEC.Text.csproj.CoreCompileInputs.cache
+C:\Users\Slivy\source\repos\TZ3310变压器现场综合试验系统\SCEEC.Text\obj\Debug\netstandard2.0\SCEEC.Text.AssemblyInfoInputs.cache
+C:\Users\Slivy\source\repos\TZ3310变压器现场综合试验系统\SCEEC.Text\obj\Debug\netstandard2.0\SCEEC.Text.AssemblyInfo.cs
+C:\Users\Slivy\source\repos\TZ3310变压器现场综合试验系统\SCEEC.Text\bin\Debug\netstandard2.0\SCEEC.Text.deps.json
+C:\Users\Slivy\source\repos\TZ3310变压器现场综合试验系统\SCEEC.Text\bin\Debug\netstandard2.0\SCEEC.Text.dll
+C:\Users\Slivy\source\repos\TZ3310变压器现场综合试验系统\SCEEC.Text\bin\Debug\netstandard2.0\SCEEC.Text.pdb
+C:\Users\Slivy\source\repos\TZ3310变压器现场综合试验系统\SCEEC.Text\obj\Debug\netstandard2.0\SCEEC.Text.dll
+C:\Users\Slivy\source\repos\TZ3310变压器现场综合试验系统\SCEEC.Text\obj\Debug\netstandard2.0\SCEEC.Text.pdb

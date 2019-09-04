@@ -1,0 +1,10 @@
+C:\Users\10995\Desktop\project\SCEEC.NET\YUYUXU\bin\Debug\YUYUXU.exe
+C:\Users\10995\Desktop\project\SCEEC.NET\YUYUXU\bin\Debug\YUYUXU.pdb
+C:\Users\10995\Desktop\project\SCEEC.NET\YUYUXU\obj\Debug\YUYUXU.csprojResolveAssemblyReference.cache
+C:\Users\10995\Desktop\project\SCEEC.NET\YUYUXU\obj\Debug\YUYUXU.Form1.resources
+C:\Users\10995\Desktop\project\SCEEC.NET\YUYUXU\obj\Debug\YUYUXU.Properties.Resources.resources
+C:\Users\10995\Desktop\project\SCEEC.NET\YUYUXU\obj\Debug\YUYUXU.csproj.GenerateResource.Cache
+C:\Users\10995\Desktop\project\SCEEC.NET\YUYUXU\obj\Debug\YUYUXU.exe
+C:\Users\10995\Desktop\project\SCEEC.NET\YUYUXU\obj\Debug\YUYUXU.pdb
+C:\Users\10995\Desktop\project\SCEEC.NET\YUYUXU\bin\Debug\SCEEC.NET.dll
+C:\Users\10995\Desktop\project\SCEEC.NET\YUYUXU\bin\Debug\SCEEC.NET.pdb

@@ -1,0 +1,149 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using SCEEC.Numerics;
+
+namespace SCEEC.MI.TZ3310
+{
+
+    public class MeasurementResult : IComparable<MeasurementResult>
+    {
+        public readonly MeasurementFunction Function;
+        private readonly PhysicalVariable[] values;
+        private readonly DateTime recordTime;
+        private readonly bool processing;
+
+        private MeasurementResult() { }
+
+        private MeasurementResult(MeasurementFunction function, PhysicalVariable[] values, bool processing)
+        {
+            this.Function = function;
+            this.values = values;
+            this.processing = processing;
+            this.recordTime = DateTime.Now;
+        }
+
+        public static MeasurementResult NewDCInsulationResult(MeasurementItemStruct testingItem, PhysicalVariable voltage, PhysicalVariable resistance, bool isOutputResult)
+        {
+            if (testingItem.Function != MeasurementFunction.DCInsulation) throw new ArgumentException("测试结果与测试项目不符");
+            if (voltage.PhysicalVariableType != Numerics.Quantities.QuantityName.Voltage) throw new ArgumentException("电压参数错误");
+            if (resistance.PhysicalVariableType != Numerics.Quantities.QuantityName.Resistance) throw new ArgumentException("电阻参数错误");
+            return new MeasurementResult(MeasurementFunction.DCInsulation, new PhysicalVariable[2] { voltage, resistance }, !isOutputResult);
+        }
+
+        public static MeasurementFunction NewCapacitanceResult(MeasurementItemStruct testingItem, PhysicalVariable voltage, PhysicalVariable capacitance, PhysicalVariable tanDelta)
+        {
+            if (testingItem.Function != MeasurementFunction.Capacitance) throw new ArgumentException("测试结果与测试项目不符");
+            if (voltage.PhysicalVariableType != Numerics.Quantities.QuantityName.Voltage) throw new ArgumentException("电压参数错误");
+            if (capacitance.PhysicalVariableType != Numerics.Quantities.QuantityName.Capacitance) throw new ArgumentException("电容参数错误");
+            if (tanDelta.PhysicalVariableType != Numerics.Quantities.QuantityName.None) throw new ArgumentException("介损参数错误");
+
+            return new MeasurementFunction();
+        }
+
+        public int CompareTo(MeasurementResult other)
+        {
+            if (other == null) throw new NullReferenceException();
+            if (this.Function != other.Function)
+            {
+                return this.Function.CompareTo(other.Function);
+            }
+            if (this.processing != other.processing)
+            {
+                if (this.processing) return 1;
+                else return -1;
+            }
+            return this.recordTime.CompareTo(other.recordTime);
+        }
+    }
+
+    public class TestingWorkerSender
+    {
+        public MeasurementItemStruct[] MeasurementItems;
+
+        public int ProgressPercent;
+        public int CurrentItemIndex;
+
+        public string StatusText;
+
+        public int RemainingItemsCount
+        {
+            get
+            {
+                return MeasurementItems.Length - CurrentItemIndex;
+            }
+        }
+
+        private List<WrapPanel> list;
+        public List<WrapPanel> GetList()
+        {
+            if (list != null) list.Clear();
+            list = new List<WrapPanel>();
+            for (int i = 0; i < MeasurementItems.Length; i++)
+            {
+                WrapPanel wp = new WrapPanel();
+                if (i < CurrentItemIndex)
+                    wp.Children.Add(new Image() { Margin = new Thickness(5), Source = new BitmapImage(new Uri("Resources/Successed.png", UriKind.Relative)), Height = 18 });
+                else if (i == CurrentItemIndex)
+                    wp.Children.Add(new Image() { Margin = new Thickness(5), Source = new BitmapImage(new Uri("Resources/Working.png", UriKind.Relative)), Height = 18 });
+                else
+                    wp.Children.Add(new Image() { Margin = new Thickness(5), Source = new BitmapImage(new Uri("Resources/Pending.png", UriKind.Relative)), Height = 18 });
+                wp.Children.Add(new TextBlock() { Margin = new Thickness(5), Text = MeasurementItems[i].Description });
+                list.Add(wp);
+            }
+            return list;
+        }
+    }
+
+    public static class MeasurementInterface
+    {
+        public static void DoMeasurement(ref MeasurementItemStruct mi)
+        {
+            switch (mi.Function)
+            {
+                case MeasurementFunction.DCInsulation:
+
+                    break;
+                case MeasurementFunction.Capacitance:
+
+                    break;
+                case MeasurementFunction.DCResistance:
+                    if (mi.Terimal != null)
+                    {
+                        
+                    }
+                    else
+                    {
+
+                    }
+                    break;
+                case MeasurementFunction.BushingDCInsulation:
+
+                    break;
+                case MeasurementFunction.BushingCapacitance:
+
+                    break;
+                case MeasurementFunction.OLTCSwitchingCharacter:
+
+                    break;
+                case MeasurementFunction.DCCharge:
+
+                    break;
+                case MeasurementFunction.Description:
+
+                    break;
+            }
+        }
+
+        public static void DoWork(ref TestingWorkerSender sender)
+        {
+            
+        }
+    }
+}
+

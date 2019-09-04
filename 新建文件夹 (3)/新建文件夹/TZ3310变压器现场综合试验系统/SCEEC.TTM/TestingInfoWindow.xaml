@@ -1,0 +1,108 @@
+﻿<Window x:Class="SCEEC.TTM.TestingInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SCEEC.TTM"
+        mc:Ignorable="d"
+        FontSize="18"
+        Style="{StaticResource WizardForm}"
+        ResizeMode="NoResize"
+        Title="TestingInfoWindow" Height="600" Width="900">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="Resources/job.png" Height="20" Grid.Column="0" Margin="5"/>
+            <TextBlock x:Name="TitleTextBlock" Text="试验参数设定与确认" Grid.Column="1" Margin="5" Style="{DynamicResource Title}"/>
+            <Button x:Name="closeButton" Grid.Column="4" Height="35" Click="CancelButton_Click">
+                <Image Source="Resources/close.png" Margin="10"/>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="600*"/>
+                <ColumnDefinition Width="300*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="试验" Grid.Column="0" Margin="5">
+                <ListBox x:Name="MeasurementItemsListBox" Margin="5"/>
+            </GroupBox>
+            <GroupBox Header="现场参数设定" Grid.Column="1" Margin="5">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="试验日期:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="0"/>
+                    <TextBox x:Name="testingTime" Text="2019-01-01" Margin="5" Grid.ColumnSpan="2" FontSize="24" TextAlignment="Right" Grid.Column="1" Grid.Row="0"/>
+                    <TextBlock Text="试验名称:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="1"/>
+                    <TextBox x:Name="testingName"  Margin="5" Grid.ColumnSpan="2" FontSize="24" TextAlignment="Right" Grid.Column="1" Grid.Row="1"/>
+                    <TextBlock Text="试验人员:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="2"/>
+                    <TextBox x:Name="tester"  Margin="5" Grid.ColumnSpan="2" FontSize="24" TextAlignment="Right" Grid.Column="1" Grid.Row="2"/>
+                    <TextBlock Text="试验单位:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="3"/>
+                    <TextBox x:Name="testingAgency"  Margin="5" Grid.ColumnSpan="2" FontSize="24" TextAlignment="Right" Grid.Column="1" Grid.Row="3"/>
+                    <TextBlock Text="审核人:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="4"/>
+                    <TextBox x:Name="auditor"  Margin="5" Grid.ColumnSpan="2" FontSize="24" TextAlignment="Right" Grid.Column="1" Grid.Row="4"/>
+                    <TextBlock Text="批准人:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="5"/>
+                    <TextBox x:Name="approver"  Margin="5" Grid.ColumnSpan="2" FontSize="24" TextAlignment="Right" Grid.Column="1" Grid.Row="5"/>
+                    <TextBlock Text="负责人:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="6"/>
+                    <TextBox x:Name="principal"  Margin="5" Grid.ColumnSpan="2" FontSize="24" TextAlignment="Right" Grid.Column="1" Grid.Row="6"/>
+                    <TextBlock Text="天气:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="7"/>
+                    <TextBox x:Name="weather"  Margin="5" Grid.ColumnSpan="2" FontSize="24" TextAlignment="Right" Grid.Column="1" Grid.Row="7"/>
+                    <TextBlock Text="温度:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="8"/>
+                    <TextBox x:Name="temperature"  Margin="5" Grid.ColumnSpan="2" FontSize="24" TextAlignment="Right" Grid.Column="1" Grid.Row="8"/>
+                    <TextBlock Text="湿度:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="9"/>
+                    <TextBox x:Name="humidity"  Margin="5" Grid.ColumnSpan="2" FontSize="24" TextAlignment="Right" Grid.Column="1" Grid.Row="9"/>
+                    <TextBlock Text="变压器油温:" VerticalAlignment="Center" Margin="5" Grid.Column="0" Grid.Row="10"/>
+                    <TextBox x:Name="OilTemperature" Text="23" Margin="5" Grid.Column="1" Grid.Row="10" TextAlignment="Right" FontSize="24"/>
+                    <TextBlock Text="℃" VerticalAlignment="Center" Grid.Column="2" Grid.Row="10" Margin="5" LostKeyboardFocus="TextBlock_LostKeyboardFocus"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <!--<Button Grid.Column="0">
+                <TextBlock x:Name="ParameterSettingButton" Text="测试参数设置" Margin="20,10,20,10"/>
+            </Button>-->
+            <Button x:Name="OKButton" Grid.Column="3" Click="OKButton_Click" HorizontalAlignment="Right"  Width="76">
+                <TextBlock Text="确定" Margin="20,10,20,10"/>
+            </Button>
+          
+            <Button x:Name="CancelButton" Grid.Column="4" HorizontalAlignment="Right"  Width="76" Click="CancelButton_Click">
+                <TextBlock Text="取消" Margin="20,10,20,10"/>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

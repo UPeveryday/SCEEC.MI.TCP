@@ -1,0 +1,7 @@
+C:\Users\10995\Desktop\project\SCEEC.NET\Tes_SCEEC.NET\bin\Debug\Tes_SCEEC.NET.exe
+C:\Users\10995\Desktop\project\SCEEC.NET\Tes_SCEEC.NET\bin\Debug\Tes_SCEEC.NET.pdb
+C:\Users\10995\Desktop\project\SCEEC.NET\Tes_SCEEC.NET\bin\Debug\SCEEC.NET.dll
+C:\Users\10995\Desktop\project\SCEEC.NET\Tes_SCEEC.NET\bin\Debug\SCEEC.NET.pdb
+C:\Users\10995\Desktop\project\SCEEC.NET\Tes_SCEEC.NET\obj\Debug\Tes_SCEEC.NET.csprojResolveAssemblyReference.cache
+C:\Users\10995\Desktop\project\SCEEC.NET\Tes_SCEEC.NET\obj\Debug\Tes_SCEEC.NET.exe
+C:\Users\10995\Desktop\project\SCEEC.NET\Tes_SCEEC.NET\obj\Debug\Tes_SCEEC.NET.pdb

@@ -1,0 +1,97 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+
+namespace SCEEC.MI.TZ3310
+{
+    public class TestingWorkerSender
+    {
+        public Transformer Transformer;
+        public MeasurementItemStruct[] MeasurementItems;
+
+        public int ProgressPercent;
+        public int CurrentItemIndex;
+
+        public string StatusText;
+
+
+        public int RemainingItemsCount
+        {
+            get
+            {
+                return MeasurementItems.Length - CurrentItemIndex;
+            }
+        }
+
+        private List<WrapPanel> list;
+        public List<WrapPanel> GetList()
+        {
+            if (list != null) list.Clear();
+            list = new List<WrapPanel>();
+            for (int i = 0; i < MeasurementItems.Length; i++)
+            {
+                WrapPanel wp = new WrapPanel();
+                if (i < CurrentItemIndex)
+                {
+                    if (!MeasurementItems[i].completed)
+                        wp.Children.Add(new Image() { Margin = new Thickness(5), Source = new BitmapImage(new Uri("Resources/Successed.png", UriKind.Relative)), Height = 18 });
+                    else
+                        wp.Children.Add(new Image() { Margin = new Thickness(5), Source = new BitmapImage(new Uri("Resources/Failed.png", UriKind.Relative)), Height = 18 });
+                }
+                else if (i == CurrentItemIndex)
+                    wp.Children.Add(new Image() { Margin = new Thickness(5), Source = new BitmapImage(new Uri("Resources/Working.png", UriKind.Relative)), Height = 18 });
+                else
+                    wp.Children.Add(new Image() { Margin = new Thickness(5), Source = new BitmapImage(new Uri("Resources/Pending.png", UriKind.Relative)), Height = 18 });
+                wp.Children.Add(new TextBlock() { Margin = new Thickness(5), Text = MeasurementItems[i].Description });
+                list.Add(wp);
+            }
+            return list;
+        }
+    }
+
+    public static class TestingWorkerUtility
+    {
+       // static TestingWorkUtility() { }
+
+        /// <summary>
+        /// 筛选测试反馈中最终输出结果的数组
+        /// </summary>
+        /// <param name="sender">测试传递结构</param>
+        /// <returns>最终输出结果的数组</returns>
+        public static MeasurementResult[] getFinalResults(TestingWorkerSender sender)
+        {
+            List<MeasurementResult> list = new List<MeasurementResult>();
+            foreach (MeasurementItemStruct m in sender.MeasurementItems)
+            {
+                if ((m != null) && ((m.failed) || (m.completed == true)))
+                {
+                    list.Add(m.Result);
+                }
+            }
+            return list.ToArray();
+        }
+
+        /// <summary>
+        /// 筛选测试反馈中最终输出结果的数组的结果文本
+        /// </summary>
+        /// <param name="sender">测试传递结构</param>
+        /// <returns>最终输出结果文本的数组</returns>
+        public static string[] getFinalResultsText(TestingWorkerSender sender)
+        {
+            List<string> strlist = new List<string>();
+            foreach (MeasurementItemStruct m in sender.MeasurementItems)
+            {
+                if ((m != null) && ((m.failed) || (m.completed == true)))
+                {
+                    strlist.Add(m.ResultText);
+                }
+            }
+            return strlist.ToArray();
+        }
+    }
+}

@@ -1,0 +1,263 @@
+﻿<Window x:Class="SCEEC.TTM.JobSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SCEEC.TTM"
+        mc:Ignorable="d"
+        Style="{DynamicResource WizardForm}"
+        Title="JobSettingWindow" Height="600" Width="1000" FontSize="18" MinWidth="1000" Closing="Window_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="Resources/job.png" Height="20" Grid.Column="0" Margin="5"/>
+            <TextBlock x:Name="TitleTextBlock" Text="试验任务单" Grid.Column="1" Margin="5" Style="{DynamicResource Title}"/>
+            <Button x:Name="minimumButton" Grid.Column="2" Height="35" Click="MinimumButton_Click">
+                <Image Source="Resources/minimum.png" Margin="10"/>
+            </Button>
+            <Button x:Name="maximumButton" Grid.Column="3" Height="35" Click="MaximumButton_Click">
+                <Image x:Name="maximumButtonImage" Source="Resources/maximum.png" Margin="10"/>
+            </Button>
+            <Button x:Name="closeButton" Grid.Column="4" Height="35" Click="CloseButton_Click">
+                <Image Source="Resources/close.png" Margin="10"/>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Column="0">
+                <ListBoxItem>
+                    <Grid Margin="20,5,5,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="变压器出厂序号: " Grid.Row="0" Grid.Column="0" Margin="5"/>
+                        <TextBox x:Name="TransformerSerialNoTextBox" MinWidth="150" IsReadOnly="True" Grid.Row="0" Grid.Column="1" Margin="5"/>
+                    </Grid>
+                </ListBoxItem>
+                <ListBoxItem>
+                    <Grid Margin="20,5,5,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="试验任务单名称: " Grid.Row="0" Grid.Column="0" Margin="5"/>
+                        <TextBox x:Name="JobNameTextBox" MinWidth="150" Grid.Row="0" Grid.Column="1" Margin="5"/>
+                    </Grid>
+                </ListBoxItem>
+                <ListBoxItem>
+                    <Expander Header="绕组绝缘性能试验" IsExpanded="True">
+                        <StackPanel Margin="20,5,5,5">
+                            <CheckBox x:Name="WindingDCInsulationCheckBox" Content="直流绝缘性能(绝缘电阻、吸收比及极化指数)" IsChecked="True" Height="25" Margin="5" Checked="WindingDCInsulationCheckBox_Checked" Unchecked="WindingDCInsulationCheckBox_Unchecked"/>
+                            <StackPanel Margin="35,0,0,0">
+                                <WrapPanel>
+                                    <TextBlock Text="测试电压: " Margin="5"/>
+                                    <ComboBox x:Name="DCInsulationTestVoltageComboBox" SelectedIndex="9">
+                                        <ComboBoxItem Content="250V"/>
+                                        <ComboBoxItem Content="500V"/>
+                                        <ComboBoxItem Content="1.0kV"/>
+                                        <ComboBoxItem Content="1.5kV"/>
+                                        <ComboBoxItem Content="2.0kV"/>
+                                        <ComboBoxItem Content="2.5kV"/>
+                                        <ComboBoxItem Content="3.0kV"/>
+                                        <ComboBoxItem Content="3,5kV"/>
+                                        <ComboBoxItem Content="4.0kV"/>
+                                        <ComboBoxItem Content="5.0kV"/>
+                                        <ComboBoxItem Content="7.5kV"/>
+                                        <ComboBoxItem Content="10kV"/>
+                                    </ComboBox>
+                                </WrapPanel>
+                                <WrapPanel>
+                                    <TextBlock Text="绝缘电阻通过下限: " Margin="5"/>
+                                    <TextBox x:Name="DCInsulationResThTextBox" Text="3" TextAlignment="Right" Width="50" Margin="5"/>
+                                    <TextBlock Text="GΩ" Margin="5"/>
+                                </WrapPanel>
+                                <WrapPanel>
+                                    <TextBlock Text="吸收比通过下限: " Margin="5"/>
+                                    <TextBox x:Name="DCInsulationARTextBox" Text="1.3" TextAlignment="Right" Width="50" Margin="5"/>
+                                </WrapPanel>
+                                <CheckBox x:Name="HVWindingDCInsulationCheckBox" Content="高压绕组" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                                <CheckBox x:Name="MVWindingDCInsulationCheckBox" Content="中压绕组" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                                <CheckBox x:Name="LVWindingDCInsulationCheckBox" Content="低压绕组" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                            </StackPanel>
+                            <CheckBox x:Name="WindingCapacitanceCheckBox" Content="绕组电容量及介质损耗因数" IsChecked="True" Height="25" Margin="5" Checked="WindingCapacitanceCheckBox_Checked" Unchecked="WindingCapacitanceCheckBox_Unchecked"/>
+                            <StackPanel Margin="35,0,0,0">
+                                <WrapPanel>
+                                    <TextBlock Text="测试电压: " Margin="5"/>
+                                    <ComboBox x:Name="CapacitanceTestVoltageComboBox" SelectedIndex="0">
+                                        <ComboBoxItem Content="0.5 kV"/>
+                                        <ComboBoxItem Content="1.0 kV"/>
+                                        <ComboBoxItem Content="1.5 kV"/>
+                                        <ComboBoxItem Content="2.0 kV"/>
+                                        <ComboBoxItem Content="2.5 kV"/>
+                                        <ComboBoxItem Content="3.0 kV"/>
+                                        <ComboBoxItem Content="3.5 kV"/>
+                                        <ComboBoxItem Content="4.0 kV"/>
+                                        <ComboBoxItem Content="4.5 kV"/>
+                                        <ComboBoxItem Content="5.0 kV"/>
+                                        <ComboBoxItem Content="5.5 kV"/>
+                                        <ComboBoxItem Content="6.0 kV"/>
+                                        <ComboBoxItem Content="6.5 kV"/>
+                                        <ComboBoxItem Content="7.0 kV"/>
+                                        <ComboBoxItem Content="7.5 kV"/>
+                                        <ComboBoxItem Content="8.0 kV"/>
+                                        <ComboBoxItem Content="8.5 kV"/>
+                                        <ComboBoxItem Content="9.0 kV"/>
+                                        <ComboBoxItem Content="9.5 kV"/>
+                                        <ComboBoxItem Content="10 kV"/>
+                                    </ComboBox>
+                                </WrapPanel>
+                                <CheckBox x:Name="HVWindingCapacitanceCheckBox" Content="高压绕组" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                                <CheckBox x:Name="MVWindingCapacitanceCheckBox" Content="中压绕组" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                                <CheckBox x:Name="LVWindingCapacitanceCheckBox" Content="低压绕组" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Expander>
+                </ListBoxItem>
+                <ListBoxItem>
+                    <Expander Header="绕组导通性能试验" IsExpanded="True">
+                        <StackPanel Margin="20,5,5,5">
+                            <CheckBox x:Name="WindingDCResistanceCheckBox" Content="绕组直流电阻" IsChecked="True" Height="25" Margin="5" Checked="WindingDCResistanceCheckBox_Checked" Unchecked="WindingDCResistanceCheckBox_Unchecked"/>
+                            <StackPanel Margin="35,0,0,0">
+                                <WrapPanel>
+                                    <TextBlock Text="测试电流: " Margin="5"/>
+                                    <ComboBox x:Name="DCResistanceCurrentComboBox" SelectedIndex="0">
+                                        <ComboBoxItem Content="1 A"/>
+                                        <ComboBoxItem Content="3 A"/>
+                                        <ComboBoxItem Content="10 A"/>
+                                    </ComboBox>
+                                </WrapPanel>
+                                <CheckBox x:Name="HVWindingDCResistanceCheckBox" Content="高压绕组" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                                <CheckBox x:Name="MVWindingDCResistanceCheckBox" Content="中压绕组" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                                <CheckBox x:Name="LVWindingDCResistanceCheckBox" Content="低压绕组" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Expander>
+                </ListBoxItem>
+                <ListBoxItem x:Name="BushingListBoxItem">
+                    <Expander Header="套管绝缘性能试验" IsExpanded="True">
+                        <StackPanel Margin="20,5,5,5">
+                            <WrapPanel>
+                                <TextBlock Text="测试电压: " Margin="5"/>
+                                <ComboBox x:Name="BushingDCInsulationTestVoltageComboBox" SelectedIndex="9">
+                                    <ComboBoxItem Content="250V"/>
+                                    <ComboBoxItem Content="500V"/>
+                                    <ComboBoxItem Content="1.0kV"/>
+                                    <ComboBoxItem Content="1.5kV"/>
+                                    <ComboBoxItem Content="2.0kV"/>
+                                    <ComboBoxItem Content="2.5kV"/>
+                                    <ComboBoxItem Content="3.0kV"/>
+                                    <ComboBoxItem Content="3,5kV"/>
+                                    <ComboBoxItem Content="4.0kV"/>
+                                    <ComboBoxItem Content="5.0kV"/>
+                                    <ComboBoxItem Content="7.5kV"/>
+                                    <ComboBoxItem Content="10kV"/>
+                                </ComboBox>
+                            </WrapPanel>
+                            <CheckBox x:Name="BushingDCInsulationCheckBox" Content="套管末屏对地绝缘电阻" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                            <WrapPanel>
+                                <TextBlock Text="测试电压: " Margin="5"/>
+                                <ComboBox x:Name="BushingCapacitanceTestVoltageComboBox" SelectedIndex="0">
+                                    <ComboBoxItem Content="0.5 kV"/>
+                                    <ComboBoxItem Content="1.0 kV"/>
+                                    <ComboBoxItem Content="1.5 kV"/>
+                                    <ComboBoxItem Content="2.0 kV"/>
+                                    <ComboBoxItem Content="2.5 kV"/>
+                                    <ComboBoxItem Content="3.0 kV"/>
+                                    <ComboBoxItem Content="3.5 kV"/>
+                                    <ComboBoxItem Content="4.0 kV"/>
+                                    <ComboBoxItem Content="4.5 kV"/>
+                                    <ComboBoxItem Content="5.0 kV"/>
+                                    <ComboBoxItem Content="5.5 kV"/>
+                                    <ComboBoxItem Content="6.0 kV"/>
+                                    <ComboBoxItem Content="6.5 kV"/>
+                                    <ComboBoxItem Content="7.0 kV"/>
+                                    <ComboBoxItem Content="7.5 kV"/>
+                                    <ComboBoxItem Content="8.0 kV"/>
+                                    <ComboBoxItem Content="8.5 kV"/>
+                                    <ComboBoxItem Content="9.0 kV"/>
+                                    <ComboBoxItem Content="9.5 kV"/>
+                                    <ComboBoxItem Content="10 kV"/>
+                                </ComboBox>
+                            </WrapPanel>
+                            <CheckBox x:Name="BushingCapacitanceCheckBox" Content="绕组-末屏电容量及介质损耗因数" IsChecked="True" Height="25" Margin="5" Checked="JobChanged" Unchecked="JobChanged"/>
+                        </StackPanel>
+                    </Expander>
+                </ListBoxItem>
+                <ListBoxItem x:Name="OLTCListBoxItem">
+                    <Expander Header="有载分接开关试验" IsExpanded="True">
+                        <StackPanel Margin="20,5,5,5">
+                            <CheckBox x:Name="OLTCCheckBox" Content="对有载分接开关进行试验" IsChecked="True" Height="25" Margin="5" Checked="OLTCCheckBox_Checked" Unchecked="OLTCCheckBox_Unchecked"/>
+                            <WrapPanel x:Name="OLTCRangeWrapPanel" Margin="35,0,0,0">
+                                <TextBlock Text="试验位置范围: 主分接± "/>
+                                <TextBox x:Name="OLTCRangeTextBox" Text="8" MinWidth="30" TextAlignment="Right" LostKeyboardFocus="OLTCRangeTextBox_LostKeyboardFocus" PreviewTextInput="OLTCRangeTextBox_PreviewTextInput" InputMethod.IsInputMethodEnabled="False"/>
+                                <TextBlock Text=" 位置"/>
+                            </WrapPanel>
+                            <CheckBox x:Name="OLTCDCResistanceCheckBox" Content="分接位置直流电阻" IsChecked="True" Height="25" Margin="40,5,5,5" Checked="JobChanged" Unchecked="JobChanged"/>
+                            <CheckBox x:Name="OLTCSwitchingCheckBox" Content="分接开关动特性及过渡电阻" IsChecked="True" Height="25" Margin="40,5,5,5" Checked="JobChanged" Unchecked="JobChanged"/>
+                        </StackPanel>
+                    </Expander>
+                </ListBoxItem>
+            </ListBox>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="184*"/>
+                    <ColumnDefinition Width="93*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="试验操作列表：" Margin="5" Grid.Row="0" Grid.ColumnSpan="2"/>
+                <WrapPanel Margin="0,5,5,5" HorizontalAlignment="Right" Grid.Column="1">
+                    <TextBlock Text="试验项目数量："/>
+                    <TextBlock x:Name="RemainingItemNumLabel" Text="{Binding Path=Items.Count, ElementName=WorkList}"/>
+                </WrapPanel>
+                <ListBox x:Name="WorkList" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.ColumnSpan="2">
+
+                </ListBox>
+            </Grid>
+
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <!--<Button Grid.Column="0">
+                <TextBlock x:Name="ParameterSettingButton" Text="测试参数设置" Margin="20,10,20,10"/>
+            </Button>-->
+            <Button x:Name="OKButton" Grid.Column="3" Click="OKButton_Click">
+                <TextBlock Text="确定" Margin="20,10,20,10"/>
+            </Button>
+            <Button x:Name="CancelButton" Grid.Column="4" HorizontalAlignment="Right" Margin="0,0,-0.2,-0.2" Width="76" Click="CancelButton_Click">
+                <TextBlock Text="取消" Margin="20,10,20,10"/>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

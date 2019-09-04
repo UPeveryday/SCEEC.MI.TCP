@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+
+namespace SCEEC.MI.TZ3310
+{
+    public class TestingWorkerSender
+    {
+        public Transformer Transformer;
+        public MeasurementItemStruct[] MeasurementItems;
+
+        public int ProgressPercent;
+        public int CurrentItemIndex;
+
+        public string StatusText;
+        //测量结果
+        public List<MeasurementResult> Results;
+
+
+        public int RemainingItemsCount
+        {
+            get
+            {
+                return MeasurementItems.Length - CurrentItemIndex;
+            }
+        }
+
+        private List<WrapPanel> list;
+        public List<WrapPanel> GetList()
+        {
+            if (list != null) list.Clear();
+            list = new List<WrapPanel>();
+            for (int i = 0; i < MeasurementItems.Length; i++)
+            {
+                WrapPanel wp = new WrapPanel();
+                if (i < CurrentItemIndex)
+                    wp.Children.Add(new Image() { Margin = new Thickness(5), Source = new BitmapImage(new Uri("Resources/Successed.png", UriKind.Relative)), Height = 18 });
+                else if (i == CurrentItemIndex)
+                    wp.Children.Add(new Image() { Margin = new Thickness(5), Source = new BitmapImage(new Uri("Resources/Working.png", UriKind.Relative)), Height = 18 });
+                else
+                    wp.Children.Add(new Image() { Margin = new Thickness(5), Source = new BitmapImage(new Uri("Resources/Pending.png", UriKind.Relative)), Height = 18 });
+                wp.Children.Add(new TextBlock() { Margin = new Thickness(5), Text = MeasurementItems[i].Description });
+                list.Add(wp);
+            }
+            return list;
+        }
+    }
+}

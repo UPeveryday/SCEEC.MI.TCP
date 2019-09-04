@@ -1,0 +1,13 @@
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\bin\Debug\SCEEC.Numerics.dll
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\bin\Debug\SCEEC.Numerics.pdb
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csprojAssemblyReference.cache
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form1.resources
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.GenerateResource.cache
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.CoreCompileInputs.cache
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.CopyComplete
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+C:\Users\上海思创TZ3310变压器综合试验系统\Desktop\TZ3310变压器现场综合试验系统\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb

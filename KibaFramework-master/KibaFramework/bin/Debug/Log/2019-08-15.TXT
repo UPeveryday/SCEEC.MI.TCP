@@ -1,0 +1,5 @@
+2019-08-15 09:53:34,083 ID:[1] ViewModel.VM_WindowMain  ~~ INFO  ~~ Start
+2019-08-15 10:38:57,258 ID:[1] ViewModel.VM_WindowMain  ~~ INFO  ~~ Start
+2019-08-15 15:02:21,082 ID:[1] ViewModel.VM_WindowMain  ~~ INFO  ~~ Start
+2019-08-15 15:06:56,871 ID:[1] ViewModel.VM_WindowMain  ~~ INFO  ~~ Start
+2019-08-15 15:23:46,703 ID:[1] ViewModel.VM_WindowMain  ~~ INFO  ~~ Start

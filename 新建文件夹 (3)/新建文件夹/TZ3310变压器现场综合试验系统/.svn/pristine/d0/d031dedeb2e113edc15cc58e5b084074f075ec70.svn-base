@@ -1,0 +1,404 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SCEEC.MI.TZ3310
+{
+    public class WindingTerimal
+    {
+        
+        public static readonly WindingTerimal O = new WindingTerimal(0);
+        public static readonly WindingTerimal A = new WindingTerimal(1);
+        public static readonly WindingTerimal B = new WindingTerimal(2);
+        public static readonly WindingTerimal C = new WindingTerimal(3);
+
+        private readonly int TerimalType;
+
+        public WindingTerimal(int TerimalType)
+        {
+            if (TerimalType > 3) throw new Exception();
+            this.TerimalType = TerimalType;
+        }
+
+        public static explicit operator int(WindingTerimal value)
+        {
+            return value.TerimalType;
+        }
+
+        public static implicit operator string(WindingTerimal value)
+        {
+            return value.ToString();
+        }
+
+        public static bool operator ==(WindingTerimal a, WindingTerimal b)
+        {
+            return (a.TerimalType == b.TerimalType);
+        }
+
+        public static bool operator !=(WindingTerimal a, WindingTerimal b)
+        {
+            return (a.TerimalType != b.TerimalType);
+        }
+
+        public override string ToString()
+        {
+            switch (this.TerimalType)
+            {
+                case 0:
+                    return "O";
+                case 1:
+                    return "A";
+                case 2:
+                    return "B";
+                case 3:
+                    return "C";
+                default:
+                    throw new Exception();
+            }
+        }
+
+        public bool Equals(WindingTerimal value)
+        {
+            return (this.TerimalType == value.TerimalType);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == this.GetType())
+                return (((WindingTerimal)obj).TerimalType == this.TerimalType);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.TerimalType.GetHashCode();
+        }
+    }
+
+    public class WindingType
+    {
+        public static readonly WindingType HV = new WindingType(0);
+        public static readonly WindingType MV = new WindingType(1);
+        public static readonly WindingType LV = new WindingType(2);
+
+        private readonly int windingType;
+
+        public WindingType(int windingType)
+        {
+            if (windingType > 2) throw new Exception();
+            this.windingType = windingType;
+        }
+
+        public static explicit operator int(WindingType value)
+        {
+            return value.windingType;
+        }
+
+        public static implicit operator string(WindingType value)
+        {
+            return value.ToString();
+        }
+
+        public static bool operator ==(WindingType a, WindingType b)
+        {
+            return (a.windingType == b.windingType);
+        }
+
+        public static bool operator !=(WindingType a, WindingType b)
+        {
+            return (a.windingType != b.windingType);
+        }
+
+        public Parameter.JYDZstation ToJYDZstation()
+        {
+            switch (this.windingType)
+            {
+                case 0: return Parameter.JYDZstation.高压绕组;
+                case 1: return Parameter.JYDZstation.中压绕组;
+                case 2: return Parameter.JYDZstation.低压绕组;
+                default: throw new Exception();
+            }
+        }
+
+        public override string ToString()
+        {
+            switch (windingType)
+            {
+                case 0:
+                    return "高压绕组";
+                case 1:
+                    return "中压绕组";
+                case 2:
+                    return "低压绕组";
+                default:
+                    throw new Exception();
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == this.GetType())
+                return (((WindingType)obj).windingType == this.windingType);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.windingType.GetHashCode();
+        }
+    }
+    
+    public struct DCInsulationParameterList
+    {
+        public int TestingVoltage_HV;
+        public int TestingVoltage_MV;
+        public int TestingVoltage_LV;
+        public double ResistorPassThreshold;
+        public double AbsorptionRatioPassThreshold;
+        public double AbsorptionRatioSkipThreshold;
+        public double PolarizationSkipThreshold;
+    }
+
+    public struct CapacitanceParameterList
+    {
+        public int TestingVoltage_HV;
+        public int TestingVoltage_MV;
+        public int TestingVoltage_LV;
+    }
+
+    public struct DCWindingResistorParameterList
+    {
+        public int MaxTestingCurrent_HV;
+        public int MaxTestingCurrent_MV;
+        public int MaxTestingCurrent_LV;
+    }
+
+    public struct BushingTestingParameterList
+    {
+        public int DCInsulationTestingVoltage;
+        public int DCInsulationTestingTime;
+
+    }
+
+    public struct WindingJobList
+    {
+        public bool HVEnabled;
+        public bool MVEnabled;
+        public bool LVEnabled;
+        public bool Enabled
+        {
+            get
+            {
+                return (HVEnabled | MVEnabled | LVEnabled);
+            }
+            set
+            {
+                HVEnabled = value;
+                MVEnabled = value;
+                LVEnabled = value;
+            }
+        }
+    }
+
+    public struct BushingJobList
+    {
+        public bool DCInsulation;
+        public bool Capacitance;
+    }
+
+    public struct OLTCJobList
+    {
+        public int Range;
+        public bool DCResistance;
+        public bool SwitchingCharacter;
+        public bool Enabled
+        {
+            get
+            {
+                return ((DCResistance | SwitchingCharacter) && (Range > 0));
+            }
+            set
+            {
+                DCResistance = value;
+                SwitchingCharacter = value;
+            }
+        }
+    }
+
+    public struct JobList
+    {
+        public string Name;
+        public Transformer Transformer;
+        public WindingJobList DCInsulation;
+        public WindingJobList Capacitance;
+        public WindingJobList DCResistance;
+        public BushingJobList Bushing;
+        public OLTCJobList OLTC;
+        public DCInsulationParameterList DCInsulationParameter;
+        public CapacitanceParameterList CapacitanceParameter;
+        public DCWindingResistorParameterList DCWindingResistorParameter;
+    }
+
+    public enum MeasurementFunction
+    {
+        Null = 0,
+        DCInsulation = 1,
+        Capacitance = 2,
+        DCResistance = 3,
+        BushingDCInsulation = 4,
+        BushingCapacitance = 5,
+        OLTCSwitchingCharacter = 6,
+        DCCharge = 7,
+        
+
+        Description = 100
+    }
+
+    public class MeasurementItemStruct
+    {
+        internal readonly MeasurementFunction Function;
+        internal WindingType Winding;
+        internal WindingTerimal[] Terimal;
+        internal string[] TapLabel;
+        internal string Text;
+        internal bool completed = false;
+        internal bool failed = false;
+        internal int state = 0;
+        internal string stateText;
+        private MeasurementItemStruct(MeasurementFunction function)
+        {
+            this.Function = function;
+        }
+
+        public static MeasurementItemStruct CreateDCInsulationMeasurementItem(WindingType winding)
+        {
+            MeasurementItemStruct mi = new MeasurementItemStruct(MeasurementFunction.DCInsulation);
+            mi.Winding = winding;
+            return mi;
+        }
+
+        public static MeasurementItemStruct CreateCapacitanceMeasurementItem(WindingType winding)
+        {
+            MeasurementItemStruct mi = new MeasurementItemStruct(MeasurementFunction.Capacitance);
+            mi.Winding = winding;
+            return mi;
+        }
+
+        public static MeasurementItemStruct CreateDCResistanceMeasurementItem(WindingType winding)
+        {
+            MeasurementItemStruct mi = new MeasurementItemStruct(MeasurementFunction.DCResistance);
+            mi.Winding = winding;
+            return mi;
+        }
+
+        public static MeasurementItemStruct CreateDCResistanceMeasurementItem(WindingType winding, WindingTerimal terimal1,WindingTerimal terimal2)
+        {
+            MeasurementItemStruct mi = new MeasurementItemStruct(MeasurementFunction.DCResistance);
+            mi.Winding = winding;
+            mi.Terimal = new WindingTerimal[2] { terimal1, terimal2 };
+            return mi;
+        }
+
+        public static MeasurementItemStruct CreateDCResistanceMeasurementItem(WindingType winding, string ChangerLabel)
+        {
+            MeasurementItemStruct mi = new MeasurementItemStruct(MeasurementFunction.DCResistance);
+            mi.Winding = winding;
+            mi.TapLabel = new string[1] { ChangerLabel };
+            return mi;
+        }
+
+        public static MeasurementItemStruct CreateDCResistanceMeasurementItem(WindingType winding, string ChangerLabel, WindingTerimal terimal1, WindingTerimal terimal2)
+        {
+            MeasurementItemStruct mi = new MeasurementItemStruct(MeasurementFunction.DCResistance);
+            mi.Winding = winding;
+            mi.Terimal = new WindingTerimal[2] { terimal1, terimal2 };
+            mi.TapLabel = new string[1] { ChangerLabel };
+            return mi;
+        }
+
+        public static MeasurementItemStruct CreateBushingDCInsulationMeasurementItem(WindingType winding, WindingTerimal terimal)
+        {
+            MeasurementItemStruct mi = new MeasurementItemStruct(MeasurementFunction.BushingDCInsulation);
+            mi.Winding = winding;
+            mi.Terimal = new WindingTerimal[1] { terimal };
+            return mi;
+        }
+
+        public static MeasurementItemStruct CreateBushingCapacitanceMeasurementItem(WindingType winding)
+        {
+            MeasurementItemStruct mi = new MeasurementItemStruct(MeasurementFunction.BushingCapacitance);
+            mi.Winding = winding;
+            return mi;
+        }
+
+        public static MeasurementItemStruct CreateOLTCSwitchingCharacterMeasurementItem(WindingType winding, string LastTapLabel, string NextTapLabel)
+        {
+            MeasurementItemStruct mi = new MeasurementItemStruct(MeasurementFunction.OLTCSwitchingCharacter);
+            mi.Winding = winding;
+            mi.TapLabel = new string[2] { LastTapLabel, NextTapLabel };
+            return mi;
+        }
+
+        public static MeasurementItemStruct CreateText(string Text)
+        {
+            MeasurementItemStruct mi = new MeasurementItemStruct(MeasurementFunction.Description);
+            mi.Text = Text;
+            return mi;
+        }
+
+        public string Description
+        {
+            get
+            {
+                try
+                {
+                    switch (Function)
+                    {
+                        case MeasurementFunction.DCInsulation://绝缘电阻
+                            return "测量" + Winding + "绝缘电阻、吸收比、极化指数;";
+                        case MeasurementFunction.Capacitance:
+                            return "测量" + Winding + "对地的电容量及介质损耗因数;";
+                        case MeasurementFunction.DCResistance:
+                            string changerDescription = "";
+                            if (TapLabel != null) changerDescription = ("在分接" + TapLabel[0] + "位置");
+                            if (Terimal != null)
+                            {
+                                return "测量" + Winding + changerDescription + Terimal[0].ToString() + "-" + Terimal[1].ToString() + "的直流电阻;";
+                            }
+                            return "测量" + Winding + changerDescription + "的直流电阻;";
+                        case MeasurementFunction.BushingDCInsulation:
+                            return "测量" + Winding + "末屏" + Terimal[0] + "套管的绝缘电阻;";//套管四个通道
+                        case MeasurementFunction.BushingCapacitance:
+                            return "测量" + Winding + "绕组对末屏的电容量及介质损耗因数;";
+                        case MeasurementFunction.OLTCSwitchingCharacter:
+                            return "测量" + Winding + TapLabel[0] + "分接->" + TapLabel[1] + "分接的过渡波形";
+                        case MeasurementFunction.DCCharge:
+                            return "对" + Winding + "进行预充电";
+                        case MeasurementFunction.Description:
+                            return Text;
+                    }
+                }
+                catch
+#if DEBUG 
+                (Exception ex)
+#endif
+                {
+#if DEBUG
+                    throw ex;
+#endif
+                }
+                return "试验项目无效!";
+            }
+        }
+
+        public override string ToString()
+        {
+            return Description;
+        }
+    }
+    
+}
+
+

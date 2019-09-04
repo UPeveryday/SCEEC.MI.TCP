@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCEEC.NET", "SCEEC.NET\SCEEC.NET.csproj", "{F264A947-22DE-46D2-93E3-9B04056D3BCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplication1", "WpfApplication1\WpfApplication1.csproj", "{8CA3419A-62DC-4751-AB0C-2A343C797979}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "数据接收", "数据接收\数据接收.csproj", "{159EF825-599C-43E4-B1C0-87525BF7F44C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F264A947-22DE-46D2-93E3-9B04056D3BCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F264A947-22DE-46D2-93E3-9B04056D3BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F264A947-22DE-46D2-93E3-9B04056D3BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F264A947-22DE-46D2-93E3-9B04056D3BCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CA3419A-62DC-4751-AB0C-2A343C797979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CA3419A-62DC-4751-AB0C-2A343C797979}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CA3419A-62DC-4751-AB0C-2A343C797979}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CA3419A-62DC-4751-AB0C-2A343C797979}.Release|Any CPU.Build.0 = Release|Any CPU
+		{159EF825-599C-43E4-B1C0-87525BF7F44C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{159EF825-599C-43E4-B1C0-87525BF7F44C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{159EF825-599C-43E4-B1C0-87525BF7F44C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{159EF825-599C-43E4-B1C0-87525BF7F44C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

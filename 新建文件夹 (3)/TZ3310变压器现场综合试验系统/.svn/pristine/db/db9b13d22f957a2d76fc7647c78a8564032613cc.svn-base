@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SCEEC.Numerics;
+
+namespace SCEEC.MI.TZ3310
+{
+    public class MeasurementResult : IComparable<MeasurementResult>
+    {
+        public readonly MeasurementFunction Function;
+        private readonly PhysicalVariable[] values;
+        private readonly DateTime recordTime;
+        private readonly bool processing;
+
+        private MeasurementResult(MeasurementFunction function, PhysicalVariable[] values, bool processing)
+        {
+            this.Function = function;
+            this.values = values;
+            this.processing = processing;
+            this.recordTime = DateTime.Now;
+        }
+
+        /// <summary>
+        /// 创建测量结果（绝缘电阻项目）
+        /// </summary>
+        /// <param name="testingItem">测量项目</param>
+        /// <param name="voltage">电压</param>
+        /// <param name="resistance">电阻</param>
+        /// <param name="isOutputResult">是否为最终输出结果</param>
+        /// <returns>测量结果</returns>
+        public static MeasurementResult NewDCInsulationResult(MeasurementItemStruct testingItem, PhysicalVariable voltage, PhysicalVariable resistance, PhysicalVariable absorption, PhysicalVariable polarization, bool isOutputResult)
+        {
+            if ((testingItem == null) || (testingItem.Function != MeasurementFunction.DCInsulation)) throw new ArgumentException("测试结果与测试项目不符");
+            if ((voltage == null) || (voltage.PhysicalVariableType != Numerics.Quantities.QuantityName.Voltage)) throw new ArgumentException("电压参数错误");
+            if ((resistance == null) || (resistance.PhysicalVariableType != Numerics.Quantities.QuantityName.Resistance)) throw new ArgumentException("电阻参数错误");
+            return new MeasurementResult(MeasurementFunction.DCInsulation, new PhysicalVariable[4] { voltage, resistance, absorption, polarization }, !isOutputResult);
+        }
+
+        /// <summary>
+        /// 创建测量结果（电容量及介质损耗项目）
+        /// </summary>
+        /// <param name="testingItem">测量项目</param>
+        /// <param name="voltage">电压</param>
+        /// <param name="capacitance">电容量</param>
+        /// <param name="tanDelta">介质损耗</param>
+        /// <param name="isOutputResult">是否为最终输出结果</param>
+        /// <returns>测量结果</returns>
+        public static MeasurementResult NewCapacitanceResult(MeasurementItemStruct testingItem, PhysicalVariable voltage, PhysicalVariable capacitance, PhysicalVariable tanDelta, bool isOutputResult)
+        {
+            if ((testingItem == null) || (testingItem.Function != MeasurementFunction.Capacitance)) throw new ArgumentException("测试结果与测试项目不符");
+            if ((voltage == null) || (voltage.PhysicalVariableType != Numerics.Quantities.QuantityName.Voltage)) throw new ArgumentException("电压参数错误");
+            if ((capacitance == null) || (capacitance.PhysicalVariableType != Numerics.Quantities.QuantityName.Capacitance)) throw new ArgumentException("电容参数错误");
+            if ((tanDelta == null) || (tanDelta.PhysicalVariableType != Numerics.Quantities.QuantityName.None)) throw new ArgumentException("介损参数错误");
+            return new MeasurementResult(MeasurementFunction.Capacitance, new PhysicalVariable[3] { voltage, capacitance, tanDelta }, !isOutputResult);
+        }
+
+        //public static MeasurementResult NewDCResistanceResult(MeasurementItemStruct testingItem, PhysicalVariable[] current, PhysicalVariable[] resistance, bool isOutputResult)
+        //{
+
+        //}
+
+        public int CompareTo(MeasurementResult other)
+        {
+            if (other == null) return 1;
+            if (this.Function != other.Function)
+            {
+                return this.Function.CompareTo(other.Function);
+            }
+            if (this.processing != other.processing)
+            {
+                if (this.processing) return 1;
+                else return -1;
+            }
+            return this.recordTime.CompareTo(other.recordTime);
+        }
+    }
+}

@@ -1,0 +1,16 @@
+C:\Users\10995\Desktop\project\SCEEC.NET\SCEEC.NET\bin\Debug\SCEEC.NET.dll
+C:\Users\10995\Desktop\project\SCEEC.NET\SCEEC.NET\bin\Debug\SCEEC.NET.pdb
+C:\Users\10995\Desktop\project\SCEEC.NET\SCEEC.NET\obj\Debug\SCEEC.NET.csprojResolveAssemblyReference.cache
+C:\Users\10995\Desktop\project\SCEEC.NET\SCEEC.NET\obj\Debug\SCEEC.NET.dll
+C:\Users\10995\Desktop\project\SCEEC.NET\SCEEC.NET\obj\Debug\SCEEC.NET.pdb
+C:\Users\10995\Desktop\project\SCEEC.NET\SCEEC.NET\bin\Debug\ChangeData.dll
+C:\Users\10995\Desktop\project\SCEEC.NET\SCEEC.NET\bin\Debug\ChangeData.pdb
+C:\Users\My\Desktop\project\SCEEC.NET\SCEEC.NET\bin\Debug\SCEEC.NET.dll
+C:\Users\My\Desktop\project\SCEEC.NET\SCEEC.NET\bin\Debug\SCEEC.NET.pdb
+C:\Users\My\Desktop\project\SCEEC.NET\SCEEC.NET\bin\Debug\ChangeData.dll
+C:\Users\My\Desktop\project\SCEEC.NET\SCEEC.NET\bin\Debug\ChangeData.pdb
+C:\Users\My\Desktop\project\SCEEC.NET\SCEEC.NET\obj\Debug\SCEEC.NET.csprojAssemblyReference.cache
+C:\Users\My\Desktop\project\SCEEC.NET\SCEEC.NET\obj\Debug\SCEEC.NET.csproj.CoreCompileInputs.cache
+C:\Users\My\Desktop\project\SCEEC.NET\SCEEC.NET\obj\Debug\SCEEC.NET.csproj.CopyComplete
+C:\Users\My\Desktop\project\SCEEC.NET\SCEEC.NET\obj\Debug\SCEEC.NET.dll
+C:\Users\My\Desktop\project\SCEEC.NET\SCEEC.NET\obj\Debug\SCEEC.NET.pdb

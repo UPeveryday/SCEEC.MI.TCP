@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A94A6467-4288-4862-94B3-928576F7B87D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SCEEC.MI.TZ3310</RootNamespace>
+    <AssemblyName>SCEEC.MI.TZ3310</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="ClassTz3310.cs" />
+    <Compile Include="Control.cs" />
+    <Compile Include="GetParameter.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Job.cs" />
+    <Compile Include="MeasurementInterface.cs" />
+    <Compile Include="MeasurementResult.cs" />
+    <Compile Include="Parameter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerialClass.cs" />
+    <Compile Include="TestingWorkerSender.cs" />
+    <Compile Include="Translator.cs" />
+    <Compile Include="WorkingDB.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SCEEC.Converter\SCEEC.Converter.csproj">
+      <Project>{d4847335-8048-4233-94c2-eb22835ddba9}</Project>
+      <Name>SCEEC.Converter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SCEEC.Data\SCEEC.Data.csproj">
+      <Project>{13674edd-863e-48bd-aecf-e548a008c7f4}</Project>
+      <Name>SCEEC.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SCEEC.Numerics\SCEEC.Numerics.csproj">
+      <Project>{9a4b3d86-6679-4d42-a5f3-f917dedf2261}</Project>
+      <Name>SCEEC.Numerics</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

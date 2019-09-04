@@ -1,0 +1,666 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+
+namespace SCEEC.MI.TZ3310
+{
+    public struct Location
+    {
+        public int id;
+        public string name;
+        public string company;
+        public string address;
+        public string operatorName;
+    }
+
+
+    public enum TransformerWindingConfigName
+    {
+        Yn = 0,
+        Y = 1,
+        D = 2,
+        Zn = 3
+    }
+
+    public enum TransformerWindingIndex
+    {
+        HV = 0,
+        MV = 1,
+        LV = 2
+    }
+
+    public struct TransformerWindingConfigStruct
+    {
+        public TransformerWindingConfigName HV;
+        public TransformerWindingConfigName MV;
+        public int MVLabel;
+        public TransformerWindingConfigName LV;
+        public int LVLabel;
+    }
+
+    public struct TransformerRatingStruct
+    {
+        public double HV;
+        public double MV;
+        public double LV;
+    }
+
+    public struct OLTCStruct
+    {
+        public bool Contained;
+        public int TapMainNum;
+        public int TapNum;
+        public WindingType WindingPosition;
+        public string SerialNo;
+        public string ModelType;
+        public string Manufacturer;
+        public string ProductionYear;
+        public double Step;
+    }
+
+    public struct BushingStruct
+    {
+        public bool HVContained;
+        public bool MVContained;
+    }
+
+    public struct Transformer
+    {
+        public int ID;
+        public string SerialNo;
+        public string Location;
+        public string ApparatusID;
+        public string Manufacturer;
+        public string ProductionYear;
+        public string AssetSystemCode;
+        public int WindingNum;
+        public TransformerWindingConfigStruct WindingConfig;
+        public int RatingFrequency;
+        public int PhaseNum;
+        public TransformerRatingStruct VoltageRating;
+        public TransformerRatingStruct PowerRating;
+        public BushingStruct Bushing;
+        public OLTCStruct OLTC;
+    }
+
+    //public struct Job
+    //{
+    //    public string Name;
+    //    public Transformer transformer;
+    //    public bool WindingDCInsulation;
+    //    public bool HVWindingDCInsulation;
+    //    public bool MVWindingDCInsulation;
+    //    public bool LVWindingDCInsulation;
+    //    public bool WindingCapacitance;
+    //    public bool HVWindingCapacitance;
+    //    public bool MVWindingCapacitance;
+    //    public bool LVWindingCapacitance;
+    //    public bool WindingDCResistance;
+    //    public bool HVWindingDCResistance;
+    //    public bool MVWindingDCResistance;
+    //    public bool LVWindingDCResistance;
+    //    public bool BushingDCInsulation;
+    //    public bool BushingCapacitance;
+    //    public bool OLTC;
+    //    public int OLTCRange;
+    //    public bool OLTCDCResistance;
+    //    public bool OLTCSwitching;
+    //}
+
+    public class WorkingDB :IDisposable
+    {
+        public string server;
+        public string port;
+        public string database;
+        public string username;
+        public string password;
+
+        public volatile bool IsStable=false;
+        public bool ShowWaveForm = false;
+        public short[] WaveForm;
+
+        public SCEEC.Data.SQLClient LocalSQLClient;
+        public System.Data.DataTable Locations;
+        public System.Data.DataTable Transformers;
+        public System.Data.DataTable Jobs;
+        public System.Data.DataTable TestResults;
+        public System.Data.DataTable Reports;
+        public SCEEC.MI.TZ3310.ClassTz3310 Tz3310;
+        public WorkingDB()
+        {
+            server = "localhost";
+            port = "3306";
+            database = "tz3310";
+            username = "ttm";
+            password = "shsceecttm";
+        }
+        
+        public WorkingDB(string server, string port, string database, string username, string password)
+        {
+            this.server = server;
+            this.port = port;
+            this.database = database;
+            this.username = username;
+            this.password = password;
+        }
+
+        public bool Connect()
+        {
+            if (!disposedValue)
+            {
+                LocalSQLClient = new SCEEC.Data.SQLClient(server, port, username, password, database);
+                return LocalSQLClient.Connected;
+            }
+            return false;
+        }
+
+        public bool refreshLocations()
+        {
+            if ((!disposedValue) && (LocalSQLClient != null))
+            {
+                this.Locations = LocalSQLClient.getDataTable(database, "location");
+                return LocalSQLClient.Connected;
+            }
+            return false;
+        }
+
+        public Location getLocation(string name)
+        {
+            Location rtn = new Location();
+            rtn.id = -1;
+
+            name = name.Trim();
+
+            if ((this.Locations != null) && (this.Locations.Rows.Count > 0))
+            {
+                foreach (System.Data.DataRow row in this.Locations.Rows)
+                {
+                    if (row["name"].ToString() == name)
+                    {
+                        rtn.id = int.Parse(row["id"].ToString());
+                        rtn.name = row["name"].ToString();
+                        rtn.company = row["company"].ToString();
+                        rtn.address = row["address"].ToString();
+                        rtn.operatorName = row["operator"].ToString();
+                        return rtn;
+                    }
+                }
+            }
+            return rtn;
+        }
+
+        public List<string> getLocationName()
+        {
+            List<string> list = new List<string>();
+            if ((this.Locations != null) && (this.Locations.Rows.Count > 0))
+                for (int i = this.Locations.Rows.Count - 1; i >= 0; i--)
+                {
+                    list.Add(this.Locations.Rows[i]["name"].ToString());
+                }
+            return list;
+        }
+
+        public int getLocationID(string name)
+        {
+            List<string> list = new List<string>();
+            if ((this.Locations != null) && (this.Locations.Rows.Count > 0))
+                foreach (System.Data.DataRow row in this.Locations.Rows)
+                {
+                    if (row["name"].ToString() == name)
+                        return int.Parse(row["id"].ToString());
+                }
+            return -1;
+        }
+
+        public bool addLocation(string name, string company = "", string address = "", string operatorName = "", int id = -1)
+        {
+            if ((!disposedValue) && (LocalSQLClient != null))
+            {
+                LocalSQLClient.insertDataRow(database, "location", new string[] { "name", "company", "address", "operator" }, new string[] { name, company, address, operatorName }, id);
+                return LocalSQLClient.Connected;
+            }
+            return false;
+        }
+
+        public bool deleteLocation(string name)
+        {
+            if ((!disposedValue) && (LocalSQLClient != null))
+            {
+                LocalSQLClient.deleteDataRow(database, "location", "name", name);
+            }
+            return false;
+        }
+
+
+        public bool updateTransformer()
+        {
+            if ((!disposedValue) && (LocalSQLClient != null))
+            {
+                this.Transformers = LocalSQLClient.getDataTable(database, "transformer");
+                return LocalSQLClient.Connected;
+            }
+            return false;
+        }
+
+        public bool saveTransformer()
+        {
+            if ((!disposedValue) && (LocalSQLClient != null))
+            {
+                LocalSQLClient.updateDataTable(database, "transformer", Transformers);
+                Transformers.AcceptChanges();
+                return LocalSQLClient.Connected;
+            }
+            return false;
+        }
+
+        public List<string> getTransformerSerialNo(string location = "")
+        {
+            List<string> list = new List<string>();
+            if (location == string.Empty)
+            {
+                foreach (DataRow row in Transformers.Rows)
+                {
+                    list.Add(row["serialno"].ToString());
+                }
+                return list;
+            }
+            location = location.Trim();
+            foreach (DataRow row in Transformers.Rows)
+            {
+                if (row["location"].ToString() == location) list.Add(row["serialno"].ToString());
+            }
+            return list;
+        }
+
+        public Transformer getTransformer(string serialNo = "")
+        {
+            Transformer transformer = new Transformer();
+            if (serialNo == string.Empty) return transformer;
+            serialNo = serialNo.Trim();
+            DataRow[] rows = WorkingSets.local.Transformers.Select("serialno = '" + serialNo + "'");
+            if (rows.Length < 1)
+                return transformer;
+            DataRow r = rows[0];
+            transformer.ID = (int)r["id"];
+            transformer.SerialNo = (string)r["serialno"];
+            transformer.Location = (string)r["location"];
+            transformer.ApparatusID = (string)r["apparatusid"];
+            transformer.Manufacturer = (string)r["manufacturer"];
+            transformer.ProductionYear = (string)r["productionyear"];
+            transformer.AssetSystemCode = (string)r["assetsystemcode"];
+            transformer.PhaseNum = (int)r["phases"];
+            transformer.WindingNum = (int)r["windings"];
+            transformer.RatingFrequency = ((int)r["ratedfrequency"]);
+            transformer.WindingConfig.HV = (TransformerWindingConfigName)(int)r["windingconfig_hv"];
+            transformer.WindingConfig.MV = (TransformerWindingConfigName)(int)r["windingconfig_mv"];
+            transformer.WindingConfig.MVLabel = (int)r["windingconfig_mv_label"];
+            transformer.WindingConfig.LV = (TransformerWindingConfigName)(int)r["windingconfig_lv"];
+            transformer.WindingConfig.LVLabel = (int)r["windingconfig_lv_label"];
+            transformer.VoltageRating.HV = ((double)r["voltageratinghv"]);
+            transformer.VoltageRating.MV = ((double)r["voltageratingmv"]);
+            transformer.VoltageRating.LV = ((double)r["voltageratinglv"]);
+            transformer.PowerRating.HV = ((double)r["powerratinghv"]);
+            transformer.PowerRating.MV = ((double)r["powerratingmv"]);
+            transformer.PowerRating.LV = ((double)r["powerratinglv"]);
+            transformer.Bushing.HVContained = (bool)r["bushing_hv_enabled"];
+            transformer.Bushing.MVContained = (bool)r["bushing_mv_enabled"];
+            transformer.OLTC.Contained = (((int)r["oltc_tapnum"]) > -1);
+            if (transformer.OLTC.Contained == true)
+            {
+                switch ((int)r["oltc_winding"])
+                {
+                    case 0:
+                        transformer.OLTC.WindingPosition = WindingType.HV;
+                        break;
+                    case 1:
+                        transformer.OLTC.WindingPosition = WindingType.MV;
+                        break;
+                    case 2:
+                        transformer.OLTC.WindingPosition = WindingType.LV;
+                        break;
+                    default:
+                        throw new Exception();
+                }
+                switch ((int)r["oltc_tapnum"])
+                {
+                    case 0:
+                        transformer.OLTC.TapNum = 3;
+                        break;
+                    case 1:
+                        transformer.OLTC.TapNum = 5;
+                        break;
+                    case 2:
+                        transformer.OLTC.TapNum = 9;
+                        break;
+                    case 3:
+                        transformer.OLTC.TapNum = 11;
+                        break;
+                    case 4:
+                        transformer.OLTC.TapNum = 17;
+                        break;
+                    case 5:
+                        transformer.OLTC.TapNum = 21;
+                        break;
+                    default:
+                        throw new Exception();
+                }
+                switch (r["oltc_step"])
+                {
+                    case 0:
+                        transformer.OLTC.Step = 0.005;
+                        break;
+                    case 1:
+                        transformer.OLTC.Step = 0.01;
+                        break;
+                    case 2:
+                        transformer.OLTC.Step = 0.0125;
+                        break;
+                    case 3:
+                        transformer.OLTC.Step = 0.02;
+                        break;
+                    case 4:
+                        transformer.OLTC.Step = 0.025;
+                        break;
+                    case 5:
+                        transformer.OLTC.Step = 0.05;
+                        break;
+                    case 6:
+                        transformer.OLTC.Step = 0.1;
+                        break;
+                    default:
+                        throw new Exception();
+                }
+                transformer.OLTC.TapMainNum = (int)r["oltc_tapmainnum"];
+                transformer.OLTC.SerialNo = (string)r["oltc_serialno"];
+                transformer.OLTC.ModelType = (string)r["oltc_modeltype"];
+                transformer.OLTC.Manufacturer = (string)r["oltc_manufacturer"];
+                transformer.OLTC.ProductionYear = (string)r["oltcproductionyear"];
+            }
+            return transformer;
+        }
+
+        public Transformer getTransformer(int transformerID)
+        {
+            Transformer transformer = new Transformer() { ID = -1 };
+            if (transformerID < 1) return transformer;
+            DataRow[] rows = WorkingSets.local.Transformers.Select("id = '" + transformerID.ToString() + "'");
+            if (rows.Length < 1)
+                return transformer;
+            DataRow r = rows[0];
+            transformer.ID = (int)r["id"];
+            transformer.SerialNo = (string)r["serialno"];
+            transformer.Location = (string)r["location"];
+            transformer.ApparatusID = (string)r["apparatusid"];
+            transformer.Manufacturer = (string)r["manufacturer"];
+            transformer.ProductionYear = (string)r["productionyear"];
+            transformer.AssetSystemCode = (string)r["assetsystemcode"];
+            transformer.PhaseNum = (int)r["phases"];
+            transformer.WindingNum = (int)r["windings"];
+            transformer.RatingFrequency = ((int)r["ratedfrequency"]);
+            transformer.WindingConfig.HV = (TransformerWindingConfigName)(int)r["windingconfig_hv"];
+            transformer.WindingConfig.MV = (TransformerWindingConfigName)(int)r["windingconfig_mv"];
+            transformer.WindingConfig.MVLabel = (int)r["windingconfig_mv_label"];
+            transformer.WindingConfig.LV = (TransformerWindingConfigName)(int)r["windingconfig_lv"];
+            transformer.WindingConfig.LVLabel = (int)r["windingconfig_lv_label"];
+            transformer.VoltageRating.HV = ((double)r["voltageratinghv"]);
+            transformer.VoltageRating.MV = ((double)r["voltageratingmv"]);
+            transformer.VoltageRating.LV = ((double)r["voltageratinglv"]);
+            transformer.PowerRating.HV = ((double)r["powerratinghv"]);
+            transformer.PowerRating.MV = ((double)r["powerratingmv"]);
+            transformer.PowerRating.LV = ((double)r["powerratinglv"]);
+            transformer.Bushing.HVContained = (bool)r["bushing_hv_enabled"];
+            transformer.Bushing.MVContained = (bool)r["bushing_mv_enabled"];
+            transformer.OLTC.Contained = (((int)r["oltc_tapnum"]) > -1);
+            if (transformer.OLTC.Contained == true)
+            {
+                switch ((int)r["oltc_winding"])
+                {
+                    case 0:
+                        transformer.OLTC.WindingPosition = WindingType.HV;
+                        break;
+                    case 1:
+                        transformer.OLTC.WindingPosition = WindingType.MV;
+                        break;
+                    case 2:
+                        transformer.OLTC.WindingPosition = WindingType.LV;
+                        break;
+                    default:
+                        throw new Exception();
+                }
+                switch ((int)r["oltc_tapnum"])
+                {
+                    case 0:
+                        transformer.OLTC.TapNum = 3;
+                        break;
+                    case 1:
+                        transformer.OLTC.TapNum = 5;
+                        break;
+                    case 2:
+                        transformer.OLTC.TapNum = 9;
+                        break;
+                    case 3:
+                        transformer.OLTC.TapNum = 11;
+                        break;
+                    case 4:
+                        transformer.OLTC.TapNum = 17;
+                        break;
+                    case 5:
+                        transformer.OLTC.TapNum = 21;
+                        break;
+                    default:
+                        throw new Exception();
+                }
+                switch (r["oltc_step"])
+                {
+                    case 0:
+                        transformer.OLTC.Step = 0.005;
+                        break;
+                    case 1:
+                        transformer.OLTC.Step = 0.01;
+                        break;
+                    case 2:
+                        transformer.OLTC.Step = 0.0125;
+                        break;
+                    case 3:
+                        transformer.OLTC.Step = 0.02;
+                        break;
+                    case 4:
+                        transformer.OLTC.Step = 0.025;
+                        break;
+                    case 5:
+                        transformer.OLTC.Step = 0.05;
+                        break;
+                    case 6:
+                        transformer.OLTC.Step = 0.1;
+                        break;
+                    default:
+                        throw new Exception();
+                }
+                transformer.OLTC.TapMainNum = (int)r["oltc_tapmainnum"];
+                transformer.OLTC.SerialNo = (string)r["oltc_serialno"];
+                transformer.OLTC.ModelType = (string)r["oltc_modeltype"];
+                transformer.OLTC.Manufacturer = (string)r["oltc_manufacturer"];
+                transformer.OLTC.ProductionYear = (string)r["oltcproductionyear"];
+            }
+            return transformer;
+        }
+
+        public bool updateJob()
+        {
+            if ((!disposedValue) && (LocalSQLClient != null))
+            {
+                this.Jobs = LocalSQLClient.getDataTable(database, "measurementjob");
+                return LocalSQLClient.Connected;
+            }
+            return false;
+        }
+
+        private JobList getJob(DataRow jobRow)
+        {
+            JobList job = new JobList();
+            try
+            {
+                job.id = (int)jobRow["id"];
+                job.Transformer = getTransformer((string)jobRow["TransformerSerialNo"]);
+                job.Name = (string)jobRow["JobName"];
+                job.DCInsulation.Enabled = (bool)jobRow["WindingDCInsulation"];
+                job.DCInsulation.HVEnabled = (bool)jobRow["HVWindingDCInsulation"];
+                job.DCInsulation.MVEnabled = (bool)jobRow["MVWindingDCInsulation"];
+                job.DCInsulation.LVEnabled = (bool)jobRow["LVWindingDCInsulation"];
+                job.Capacitance.Enabled = (bool)jobRow["WindingCapacitance"];
+                job.Capacitance.HVEnabled = (bool)jobRow["HVWindingCapacitance"];
+                job.Capacitance.MVEnabled = (bool)jobRow["MVWindingCapacitance"];
+                job.Capacitance.LVEnabled = (bool)jobRow["LVWindingCapacitance"];
+                job.DCResistance.Enabled = (bool)jobRow["WindingDCResistance"];
+                job.DCResistance.HVEnabled = (bool)jobRow["HVWindingDCResistance"];
+                job.DCResistance.MVEnabled = (bool)jobRow["MVWindingDCResistance"];
+                job.DCResistance.LVEnabled = (bool)jobRow["LVWindingDCResistance"];
+                job.Bushing.DCInsulation = (bool)jobRow["BushingDCInsulation"];
+                job.Bushing.Capacitance = (bool)jobRow["BushingCapacitance"];
+                job.OLTC.Enabled = (bool)jobRow["OLTC"];
+                job.OLTC.Range = (int)jobRow["OLTCRangeTextBox"];
+                job.OLTC.DCResistance = (bool)jobRow["OLTCDCResistance"];
+                job.OLTC.SwitchingCharacter = (bool)jobRow["OLTCSwitching"];
+                job.Parameter.DCInsulationVoltage = (int)jobRow["dci_voltage"];
+                job.Parameter.DCInsulationResistance = (double)jobRow["dci_resistance"];
+                job.Parameter.DCInsulationAbsorptionRatio = (double)jobRow["dci_ar"];
+                job.Parameter.CapacitanceVoltage = (int)jobRow["cap_voltage"];
+                job.Parameter.DCResistanceCurrent = (int)jobRow["dcr_current"];
+                job.Parameter.BushingDCInsulationVoltage = (int)jobRow["bushing_dci_voltage"];
+                job.Parameter.BushingCapacitanceVoltage = (int)jobRow["bushing_cap_voltage"];
+            }
+            catch(Exception ex)
+            {
+#if DEBUG
+                 throw ex;
+#else
+                ex.ToString();
+                job = new JobList() ;
+#endif
+            }
+            return job;
+        }
+
+        public JobList getJob(string TransformerSerialNo, string JobName)
+        {
+            JobList job = new JobList();
+            TransformerSerialNo = TransformerSerialNo.Trim();
+            JobName = JobName.Trim();
+            DataRow[] rows = WorkingSets.local.Jobs.Select("TransformerSerialNo = '" + TransformerSerialNo + "' and JobName = '" + JobName + "'");
+            if (rows.Length > 0)
+                return getJob(rows[0]);
+            return job;
+        }
+
+        public JobList getJob(int jobID)
+        {
+            JobList job = new JobList();
+            DataRow[] rows = WorkingSets.local.Jobs.Select("id = '" + jobID.ToString() + "'");
+            if (rows.Length > 0)
+                return getJob(rows[0]);
+            return job;
+        }
+
+        public List<JobList> getJobs(string TransformerSerialNo = "")
+        {
+            List<JobList> JobList = new List<JobList>();
+            TransformerSerialNo = TransformerSerialNo.Trim();
+            if (TransformerSerialNo == string.Empty) return JobList;
+            DataRow[] rows = WorkingSets.local.Jobs.Select("TransformerSerialNo = '" + TransformerSerialNo + "'");
+            foreach (DataRow row in rows)
+            {
+                JobList.Add(getJob(row));
+            }
+            return JobList;
+        }
+
+        public List<string> getJobNames(string TransformerSerialNo)
+        {
+            List<string> jobNames = new List<string>();
+            TransformerSerialNo = TransformerSerialNo.Trim();
+            if (TransformerSerialNo == string.Empty) return jobNames;
+            DataRow[] rows = WorkingSets.local.Jobs.Select("TransformerSerialNo = '" + TransformerSerialNo + "'");
+            foreach (DataRow row in rows)
+            {
+                jobNames.Add((string)row["JobName"]);
+            }
+            return jobNames;
+        }
+
+        public bool saveJobs()
+        {
+            if ((!disposedValue) && (LocalSQLClient != null))
+            {
+                LocalSQLClient.updateDataTable(database, "measurementjob", Jobs);
+                Jobs.AcceptChanges();
+                return LocalSQLClient.Connected;
+            }
+            return false;
+        }
+
+        public bool refreshTestResults()
+        {
+            if ((!disposedValue) && (LocalSQLClient != null))
+            {
+                this.TestResults = LocalSQLClient.getDataTable(database, "testresult");
+                return LocalSQLClient.Connected;
+            }
+            return false;
+        }
+         
+        public bool saveTestResults()
+        {
+            if ((!disposedValue) && (LocalSQLClient != null))
+            {
+                LocalSQLClient.updateDataTable(database, "testresult", TestResults);
+                TestResults.AcceptChanges();
+                return LocalSQLClient.Connected;
+            }
+            return false;
+        }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // 要检测冗余调用
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    if (LocalSQLClient != null) LocalSQLClient.Dispose();
+                    if (Locations != null) Locations.Dispose();
+                    if (Transformers != null) Transformers.Dispose();
+                    if (Jobs != null) Jobs.Dispose();
+                    if (TestResults != null) TestResults.Dispose();
+                    if (Reports != null) Reports.Dispose();
+                }
+
+                GC.SuppressFinalize(this);
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: 仅当以上 Dispose(bool disposing) 拥有用于释放未托管资源的代码时才替代终结器。
+        // ~WorkingDBClass() {
+        //   // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+        //   Dispose(false);
+        // }
+
+        // 添加此代码以正确实现可处置模式。
+        void IDisposable.Dispose()
+        {
+            // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+            Dispose(true);
+            // TODO: 如果在以上内容中替代了终结器，则取消注释以下行。
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
+    }
+
+    public static class WorkingSets
+    {
+        public static WorkingDB local=new WorkingDB();
+    }
+}

@@ -1,0 +1,575 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using SCEEC.Numerics;
+
+namespace SCEEC.MI.TZ3310
+{
+    public static class MeasurementInterface
+    {
+
+         static  ClassTz3310 TZ3310 = new ClassTz3310();
+        public static MeasurementResult DoMeasurement(ref MeasurementItemStruct mi, Transformer transformer)
+        {
+            switch (mi.Function)
+            {
+                case MeasurementFunction.DCInsulation:
+                    switch(mi.state)
+                    {
+                        case 0:
+                            byte[] TestKindData = TZ3310.SetPraJydz(mi.Winding.ToJYDZstation(), Parameter.JYDZVoilt._0_5KV, 50, 50, 130, 0);
+                            Thread.Sleep(100);
+                            TZ3310.StartTest(TestKindData);
+                            mi.stateText = "正在测试"+mi.Winding+"绝缘电阻中...";
+                            mi.state++;
+                            Thread.Sleep(4000);
+                            break;
+                        case 1:
+                            string[] Recbuffer = TZ3310.ReadTestData(Parameter.TestKind.绝缘电阻);
+                            if(Recbuffer!=null)
+                            {
+                                if (Recbuffer[Recbuffer.Length - 1] == "0")
+                                    mi.Result = MeasurementResult.NewDCInsulationResult(mi, NumericsConverter.Text2Value(Recbuffer[0]), NumericsConverter.Text2Value(Recbuffer[1]),
+                                        NumericsConverter.Text2Value(Recbuffer[2]), null, false);
+                                else if (Recbuffer[Recbuffer.Length - 1] == "1")
+                                {
+                                    mi.Result = MeasurementResult.NewDCInsulationResult(mi, null, NumericsConverter.Text2Value(Recbuffer[0]),
+                                       NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[2]), true);
+                                  //  mi.state++;
+                                    mi.completed = true;
+                                    // mi.state++;
+                                    mi.stateText = "读取" + mi.Winding + "绝缘电阻结果成功";
+
+                                }
+                                else
+                                {
+                                    mi.failed = true;
+                                    mi.completed = true;
+
+                                    mi.stateText = Recbuffer[0].ToString();
+                                }
+                            }
+                            break;
+                      
+                    }
+                    break;
+                case MeasurementFunction.Capacitance:
+                    switch (mi.state)
+                    {
+                        case 0:
+                            byte[] TestKindData = TZ3310.SetPraJs(mi.Winding.ToJSstation(), Parameter.JSstyle.内接反接, Parameter.JSVoilt._0_5KV,Parameter.JSFrequency._45To_55HZ,0);
+                            Thread.Sleep(100);
+                            TZ3310.StartTest(TestKindData);
+                            mi.stateText = "正在测试" + mi.Winding + "介损绕组中...";
+                            mi.state++;
+                            Thread.Sleep(4000);
+                            break;
+                        case 1:
+                            string[] Recbuffer = TZ3310.ReadTestData(Parameter.TestKind.介质损耗);
+                            if (Recbuffer != null)
+                            {
+                                if (Recbuffer[Recbuffer.Length - 1] == "0")
+                                    mi.Result = MeasurementResult.NewCapacitanceResult(mi, NumericsConverter.Text2Value(Recbuffer[1]),null,null
+                                       ,NumericsConverter.Text2Value(Recbuffer[2]), NumericsConverter.Text2Value(Recbuffer[3]), false);
+                                else if (Recbuffer[Recbuffer.Length - 1] == "1")
+                                {
+                                    mi.Result = MeasurementResult.NewCapacitanceResult(mi, NumericsConverter.Text2Value(Recbuffer[0]), 
+                                        NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[2])
+                                      , null, NumericsConverter.Text2Value(Recbuffer[3]), true);
+                                    //  mi.state++;
+                                    mi.completed = true;
+                                    // mi.state++;
+                                    mi.stateText = "读取" + mi.Winding + "绕组测试成功";
+
+
+                                }
+                                else
+                                {
+                                    mi.failed = true;
+                                    mi.completed = true;
+
+                                    mi.stateText = Recbuffer[0].ToString();
+                                }
+                            }
+                            break;
+
+                    }
+
+                    break;
+                case MeasurementFunction.DCResistance://直流电阻
+
+                    if (mi.Terimal != null)
+                    {
+                        Parameter.ZldzStation Dcposition;
+
+                        //  MeasurementResult.NewDCResistanceResult(mi,);
+                        if (mi.Winding == WindingType.HV)
+                        {
+
+                            Dcposition = (Parameter.ZldzStation)(Parameter.ZldzStation.高压全部 + (((int)mi.Terimal[0] + 3) % 4));//1
+                        } 
+                        else if(mi.Winding == WindingType.MV)
+                        {
+                            Dcposition = (Parameter.ZldzStation)(Parameter.ZldzStation.中压全部 + (((int)mi.Terimal[0] + 3) % 4));//5
+                        }
+                        else
+                        {
+                            Dcposition = (Parameter.ZldzStation)(Parameter.ZldzStation.低压全部 + (((int)mi.Terimal[0] + 3) % 4));//9
+
+                        }
+                        switch (mi.state)
+                        {
+                            
+                            case 0:
+                                if(Dcposition== Parameter.ZldzStation.高压全部&& Dcposition == Parameter.ZldzStation.中压全部 && Dcposition == Parameter.ZldzStation.低压全部 )
+                                {
+                                    mi.Terimal = null;
+                                    break;
+                                }
+                                byte[] TestKindData = TZ3310.SetPraZldz((Parameter.ZldzWindingKind)mi.WindingConfig, Dcposition, Parameter.ZldzCurrent._3A, 0);
+                                Thread.Sleep(100);
+                                TZ3310.StartTest(TestKindData);
+                                mi.stateText = "正在测试" + mi.Winding + "直流电阻中...";
+                                mi.state++;
+                                Thread.Sleep(4000);
+                                break;
+                            case 1:
+
+                                string[] Recbuffer = TZ3310.ReadTestData(Parameter.TestKind.直流电阻);
+                                if (Recbuffer != null)
+                                {
+                                    if (Recbuffer[Recbuffer.Length - 1] == "0")
+                                    {
+                                        PhysicalVariable[] Voltage = { NumericsConverter.Text2Value(Recbuffer[0]), NumericsConverter.Text2Value(Recbuffer[3]), NumericsConverter.Text2Value(Recbuffer[6]) };
+                                        PhysicalVariable[] Current = { NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[4]), NumericsConverter.Text2Value(Recbuffer[7]) };
+                                        PhysicalVariable[] Resistance = { NumericsConverter.Text2Value(Recbuffer[2]), NumericsConverter.Text2Value(Recbuffer[5]), NumericsConverter.Text2Value(Recbuffer[8]) };
+                                        mi.Result = MeasurementResult.NewDCResistanceResult(mi, Voltage, Current, Resistance, false);
+
+                                        mi.state++;//测量结束数据需要确定
+                                        mi.stateText = "读取" + mi.Winding + "直流电阻数据中...";//临时
+                                    }
+                                    #region
+                                    //else if (Recbuffer[Recbuffer.Length - 1] == "1")
+                                    //{
+                                    //    PhysicalVariable[] Voltage = { NumericsConverter.Text2Value(Recbuffer[0]), NumericsConverter.Text2Value(Recbuffer[3]), NumericsConverter.Text2Value(Recbuffer[6]) };
+                                    //    PhysicalVariable[] Current = { NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[4]), NumericsConverter.Text2Value(Recbuffer[7]) };
+                                    //    PhysicalVariable[] Resistance = { NumericsConverter.Text2Value(Recbuffer[2]), NumericsConverter.Text2Value(Recbuffer[5]), NumericsConverter.Text2Value(Recbuffer[8]) };
+                                    //    mi.Result = MeasurementResult.NewDCResistanceResult(mi, Voltage, Current, Resistance, true);
+                                    //    mi.completed = true;
+                                    //    mi.stateText = "读取" + mi.Winding + "直流电阻结果成功";
+
+
+                                    //}
+                                    #endregion
+                                    else
+                                    {
+                                        mi.failed = true;
+                                        mi.completed = true;
+                                        mi.stateText = Recbuffer[0].ToString();
+                                    }
+                                }
+                                break;
+                            case 2:
+                                string[] Recbuffer1 = TZ3310.ReadTestData(Parameter.TestKind.直流电阻);
+                                if (Recbuffer1 != null)
+                                {
+                                    if (Recbuffer1[Recbuffer1.Length - 1] == "0")
+                                    {
+                                        PhysicalVariable[] Voltage = { NumericsConverter.Text2Value(Recbuffer1[0]), NumericsConverter.Text2Value(Recbuffer1[3]), NumericsConverter.Text2Value(Recbuffer1[6]) };
+                                        PhysicalVariable[] Current = { NumericsConverter.Text2Value(Recbuffer1[1]), NumericsConverter.Text2Value(Recbuffer1[4]), NumericsConverter.Text2Value(Recbuffer1[7]) };
+                                        PhysicalVariable[] Resistance = { NumericsConverter.Text2Value(Recbuffer1[2]), NumericsConverter.Text2Value(Recbuffer1[5]), NumericsConverter.Text2Value(Recbuffer1[8]) };
+                                        mi.Result = MeasurementResult.NewDCResistanceResult(mi, Voltage, Current, Resistance, false);
+
+                                        //判定稳定算法
+                                        Thread.Sleep(1000);
+
+                                        if (TZ3310.InterRuptMe(Parameter.CommanTest.判断直流电阻稳定状态))
+                                        {
+                                            Thread.Sleep(1000);
+                                            mi.state++;
+                                            mi.stateText = "确定" + mi.Winding + "直流电阻稳定成功";//临时
+                                        }
+                                        else
+                                        {
+                                            Thread.Sleep(1000);
+                                            mi.failed = true;
+                                            mi.completed = true;
+                                           // mi.state++;
+                                            mi.stateText = "确定" + mi.Winding + "直流电阻稳定失败";//临时
+                                        }
+                                       
+                                    }
+                                    else
+                                    {
+                                        mi.failed = true;
+                                        mi.completed = true;
+                                        mi.stateText = "读取" + mi.Winding + "直流电阻过程数据失败";//临时
+
+                                    }
+                                }
+                                break;
+                            case 3:
+                                string[] Recbuffer2 = TZ3310.ReadTestData(Parameter.TestKind.直流电阻);
+                                if (Recbuffer2 != null)
+                                {
+                                    if (Recbuffer2[Recbuffer2.Length - 1] == "0")
+                                    {
+                                        PhysicalVariable[] Voltage = { NumericsConverter.Text2Value(Recbuffer2[0]), NumericsConverter.Text2Value(Recbuffer2[3]), NumericsConverter.Text2Value(Recbuffer2[6]) };
+                                        PhysicalVariable[] Current = { NumericsConverter.Text2Value(Recbuffer2[1]), NumericsConverter.Text2Value(Recbuffer2[4]), NumericsConverter.Text2Value(Recbuffer2[7]) };
+                                        PhysicalVariable[] Resistance = { NumericsConverter.Text2Value(Recbuffer2[2]), NumericsConverter.Text2Value(Recbuffer2[5]), NumericsConverter.Text2Value(Recbuffer2[8]) };
+
+                                        Thread.Sleep(1000);
+                                       string[] OutCurrent= TZ3310.ReadTestData(Parameter.TestKind.读取放电数据);
+                                       
+                                        if(OutCurrent != null)
+                                        {
+
+                                            if (OutCurrent[0] == "1")
+                                                mi.stateText = "直流电阻" + mi.Winding + "正在放电...";//临时
+                                            else if (OutCurrent[0] == "2")
+                                            {
+                                                mi.stateText = "直流电阻" + mi.Winding + "放电完成";//临时
+                                                Thread.Sleep(1000);
+                                                mi.Result = MeasurementResult.NewDCResistanceResult(mi, Voltage, Current, Resistance, true);
+                                                mi.completed = true;
+                                            }
+
+                                            else
+                                            {
+                                                mi.failed = true;
+                                                mi.completed = true;
+                                                mi.stateText = "直流电阻" + mi.Winding + "放电出错";//临时
+                                               // mi.stateText = Recbuffer2[0].ToString();
+                                            }
+                                          
+                                          //  mi.stateText = "确定" + mi.Winding + "直流电阻稳定成功";//临时
+                                        }
+                                       
+                                    }
+                                    else
+                                    {
+                                        mi.failed = true;
+                                        mi.completed = true;
+
+                                        mi.stateText = Recbuffer2[0].ToString();
+                                    }
+                                }
+                                break;
+
+                        }
+                    }
+                    else
+                    {
+                        switch (mi.state)
+                        {
+                            case 0:
+                                byte[] TestKindData = TZ3310.SetPraZldz((Parameter.ZldzWindingKind)mi.WindingConfig, mi.Winding.TozldzStation(), Parameter.ZldzCurrent._3A, 0);
+                                Thread.Sleep(100);
+                                TZ3310.StartTest(TestKindData);
+                                mi.stateText = "正在测试" + mi.Winding.TozldzStation() + "直流电阻中...";
+                                mi.state++; 
+                                Thread.Sleep(4000);
+                                break;
+                            case 1:
+                                string[] Recbuffer = TZ3310.ReadTestData(Parameter.TestKind.直流电阻);
+                                if (Recbuffer != null)
+                                {
+                                    if (Recbuffer[Recbuffer.Length - 1] == "0")
+                                    {
+                                        PhysicalVariable[] Voltage = {NumericsConverter.Text2Value(Recbuffer[0]), NumericsConverter.Text2Value(Recbuffer[3]), NumericsConverter.Text2Value(Recbuffer[6]) };
+                                        PhysicalVariable[] Current = { NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[4]), NumericsConverter.Text2Value(Recbuffer[7]) };
+                                        PhysicalVariable[] Resistance = { NumericsConverter.Text2Value(Recbuffer[2]), NumericsConverter.Text2Value(Recbuffer[5]), NumericsConverter.Text2Value(Recbuffer[8]) };
+                                        mi.Result = MeasurementResult.NewDCResistanceResult(mi, Voltage, Current, Resistance, false);
+
+                                        Thread.Sleep(1000);
+                                        TZ3310.InterRuptMe(Parameter.CommanTest.判断直流电阻稳定状态);//临时模拟
+                                        Thread.Sleep(3000);//临时模拟
+                                        TZ3310.InterRuptMe(Parameter.CommanTest.模拟按键中断测量);//临时模拟
+                                        Thread.Sleep(2000);
+                                        mi.completed = true;//临时模拟
+                                        mi.stateText = "读取" + mi.Winding.TozldzStation() + "直流电阻读取成功";//临时模拟
+                                    }
+
+                                    else if (Recbuffer[Recbuffer.Length - 1] == "1")
+                                    {
+                                        PhysicalVariable[] Voltage = { NumericsConverter.Text2Value(Recbuffer[0]), NumericsConverter.Text2Value(Recbuffer[3]), NumericsConverter.Text2Value(Recbuffer[6]) };
+                                        PhysicalVariable[] Current = { NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[4]), NumericsConverter.Text2Value(Recbuffer[7]) };
+                                        PhysicalVariable[] Resistance = { NumericsConverter.Text2Value(Recbuffer[2]), NumericsConverter.Text2Value(Recbuffer[5]), NumericsConverter.Text2Value(Recbuffer[8]) };
+                                        mi.Result = MeasurementResult.NewDCResistanceResult(mi, Voltage, Current, Resistance, true);
+                                        //  mi.state++;
+                                        mi.completed = true;
+                                        // mi.state++;
+                                        mi.stateText = "读取" + mi.Winding.TozldzStation() + "直流电阻结果成功";
+
+
+                                    }
+                                    else
+                                    {
+                                        mi.failed = true;
+                                        mi.completed = true;
+
+                                        mi.stateText = Recbuffer[0].ToString();
+                                    }
+                                }
+                                break;
+
+                        }
+                    }
+                    break;
+                case MeasurementFunction.BushingDCInsulation:
+                    Parameter.JYDZstation position;
+                    if (mi.Winding == WindingType.HV)
+                    {
+                        position = (Parameter.JYDZstation)(Parameter.JYDZstation.高压套管A + (((int)mi.Terimal[0] + 3) % 4));
+                    }
+                    else
+                    {
+                        position = (Parameter.JYDZstation)(Parameter.JYDZstation.中压套管A + (((int)mi.Terimal[0] + 3) % 4));
+                    }
+                    switch (mi.state)
+                    {
+                        case 0:
+                            byte[] TestKindData = TZ3310.SetPraJydz(position, Parameter.JYDZVoilt._0_5KV, 50, 30, 100, 0);
+                            Thread.Sleep(100);
+                            TZ3310.StartTest(TestKindData);
+                            mi.stateText = "正在测试"+position.ToString()+"末屏中...";
+                            mi.state++;
+                            Thread.Sleep(4000);
+                            break;
+                        case 1:
+                            string[] Recbuffer = TZ3310.ReadTestData(Parameter.TestKind.绝缘电阻);
+                            if (Recbuffer != null)
+                            {
+                                if (Recbuffer[Recbuffer.Length - 1] == "0")
+                                    mi.Result = MeasurementResult.NewBushingDCInsulationResult(mi, NumericsConverter.Text2Value(Recbuffer[0]), NumericsConverter.Text2Value(Recbuffer[1]),
+                                        NumericsConverter.Text2Value(Recbuffer[2]), null, false);
+                                else if (Recbuffer[Recbuffer.Length - 1] == "1")
+                                {
+                                    mi.Result = MeasurementResult.NewBushingDCInsulationResult(mi, null, NumericsConverter.Text2Value(Recbuffer[0]),
+                                       NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[2]), true);
+                                    mi.state++;
+                                    mi.completed = true;
+                                    // mi.state++;
+                                    mi.stateText =  position.ToString() + "末屏测试完成";
+                                    Thread.Sleep(2000);
+
+
+                                }
+                                else
+                                {
+                                    mi.failed = true;
+                                    mi.completed = true;
+
+                                    mi.stateText = Recbuffer[0].ToString();
+                                }
+                            }
+                            break;
+                       
+
+
+                    }
+                    break;
+                case MeasurementFunction.BushingCapacitance:
+
+                    Parameter.JSstation Jsposition;
+                    if (mi.Winding == WindingType.HV)
+                    {
+                        Jsposition = (Parameter.JSstation)(Parameter.JSstation.高压套管A + (((int)mi.Terimal[0] + 3) % 4));
+                    }
+                    else
+                    {
+                        Jsposition = (Parameter.JSstation)(Parameter.JSstation.中压套管A + (((int)mi.Terimal[0] + 3) % 4));
+                    }
+                    switch (mi.state)
+                    {
+                        case 0:
+                            byte[] TestKindData = TZ3310.SetPraJs(Jsposition, Parameter.JSstyle.内接正接, Parameter.JSVoilt._0_5KV, Parameter.JSFrequency._45To_55HZ, 0);
+                            Thread.Sleep(100);
+                            TZ3310.StartTest(TestKindData);
+                            mi.stateText = "正在测试" + mi.Winding + "末屏中...";
+                            mi.state++;
+                            Thread.Sleep(4000);
+                            break;
+                        case 1:
+                            string[] Recbuffer = TZ3310.ReadTestData(Parameter.TestKind.介质损耗);
+                            if (Recbuffer != null)
+                            {
+                                if (Recbuffer[Recbuffer.Length - 1] == "0")
+                                    mi.Result = MeasurementResult.NewBushingCapacitanceResult(mi, NumericsConverter.Text2Value(Recbuffer[1]), null, null
+                                       , NumericsConverter.Text2Value(Recbuffer[2]), NumericsConverter.Text2Value(Recbuffer[3]), false);
+                                else if (Recbuffer[Recbuffer.Length - 1] == "1")
+                                {
+                                    mi.Result = MeasurementResult.NewBushingCapacitanceResult(mi, NumericsConverter.Text2Value(Recbuffer[0]),
+                                        NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[2])
+                                      , null, NumericsConverter.Text2Value(Recbuffer[3]), true);
+                                    //  mi.state++;
+                                    mi.completed = true;
+                                    // mi.state++;
+                                    mi.stateText = "读取" + mi.Winding + "末屏测试完成";
+
+
+                                }
+                                else
+                                {
+                                    mi.failed = true;
+                                    mi.completed = true;
+
+                                    mi.stateText = Recbuffer[0].ToString();
+                                }
+                            }
+                            break;
+
+                    }
+                    break;
+                case MeasurementFunction.OLTCSwitchingCharacter:
+                    //mi.Result = MeasurementResult.
+                    Parameter.YzfjStation yzfjStation;
+                    if (mi.Winding == WindingType.HV)
+                    {
+                        yzfjStation = Parameter.YzfjStation.高压侧; 
+                    }
+                    else
+                    {
+                        yzfjStation = Parameter.YzfjStation.中压侧;
+                    }
+                    switch (mi.state)
+                    {
+                        //mi.WindingConfig
+                        
+                        case 0:
+                            byte[] TestKindData = TZ3310.SetPraYzfj((Parameter.YzfjWindingKind)mi.WindingConfig, yzfjStation, Parameter.yzfjTap._1To_2, 5, 5, 0);
+                            Thread.Sleep(100);
+                            TZ3310.StartTest(TestKindData);
+                            mi.stateText = "正在测试" + mi.Winding + "有载分接中...";
+                            mi.state++;
+                            Thread.Sleep(4000);
+                            break;
+                        case 1:
+                           
+                            string[] Recbuffer = TZ3310.ReadTestData(Parameter.TestKind.有载分接);
+                            if (Recbuffer != null)
+                            {
+                                bool ReadforT;
+                                if (Recbuffer[0] == "1")  ReadforT = true;
+                                else ReadforT = false;
+                                if (Recbuffer.Length == 7)
+                                {
+
+                                    PhysicalVariable[] Voltage = {NumericsConverter.Text2Value(Recbuffer[1]), NumericsConverter.Text2Value(Recbuffer[3]), NumericsConverter.Text2Value(Recbuffer[5]) };//135
+                                    PhysicalVariable[] current = { NumericsConverter.Text2Value(Recbuffer[2]), NumericsConverter.Text2Value(Recbuffer[4]), NumericsConverter.Text2Value(Recbuffer[6]) };//246
+                                    PhysicalVariable[] Resistans = new PhysicalVariable[3];
+                                    Resistans[0] = NumericsConverter.Text2Value("0.005");
+                                    Resistans[1] = NumericsConverter.Text2Value("0.005");
+                                    Resistans[2] = NumericsConverter.Text2Value("0.005");
+                                    mi.Result = MeasurementResult.NewOLTCSwitchingCharacterResult(mi, Voltage,current, Resistans, null, ReadforT, false);
+                                    mi.stateText = "读取" + mi.Winding + "有载分接充电中...";
+                                   if(ReadforT)//可以触发
+                                        mi.state++;
+                                }
+
+                                else
+                                {
+                                    mi.failed = true;
+                                    mi.completed = false ;
+                                    mi.stateText = Recbuffer[0].ToString();
+                                }
+                            }
+                            break;
+                        case 2:
+                            string[] Recbuffer1 = TZ3310.ReadTestData(Parameter.TestKind.有载分接);
+                            if (Recbuffer1 != null)
+                            {
+                                bool ReadforR;
+                                if (Recbuffer1[0] == "2") ReadforR = true;
+                                else ReadforR = false;
+                                if (Recbuffer1.Length == 7)
+                                {
+                                    PhysicalVariable[] Voltage = { NumericsConverter.Text2Value(Recbuffer1[1]), NumericsConverter.Text2Value(Recbuffer1[3]), NumericsConverter.Text2Value(Recbuffer1[5]) };//135
+                                    PhysicalVariable[] current = { NumericsConverter.Text2Value(Recbuffer1[2]), NumericsConverter.Text2Value(Recbuffer1[4]), NumericsConverter.Text2Value(Recbuffer1[6]) };//246
+                                    PhysicalVariable[] Resistans = new PhysicalVariable[3];
+                                    Resistans[0] = NumericsConverter.Text2Value("0.005");
+                                    Resistans[1] = NumericsConverter.Text2Value("0.005");
+                                    Resistans[2] = NumericsConverter.Text2Value("0.005");
+                                    mi.Result = MeasurementResult.NewOLTCSwitchingCharacterResult(mi, Voltage, current, Resistans, null, ReadforR, false);
+                                    mi.stateText = "读取" + mi.Winding + "有载分接等待触发";
+                                    if (ReadforR)//触发成功
+                                    {
+                                        mi.stateText = "读取" + mi.Winding + "触发成功";
+                                        Thread.Sleep(500);
+                                        mi.state++;
+
+                                    }
+                                   
+                                }
+
+                                else if(Recbuffer1.Length == 1)
+                                {
+                                   // mi.failed = true;
+                                    mi.completed = true;
+                                    mi.stateText = "错误类型："+Recbuffer1[0].ToString();
+                                }
+                            }
+                            break;
+                        case 3:
+                            mi.stateText = "波形读取中...";
+                            mi.state++;
+                            break;
+                        case 4:
+                            mi.stateText = "波形读取中...";
+                           // Thread.Sleep(2000);
+                            short[] Waveform = TZ3310.ReadWaveForm1();//5s
+                            if(Waveform!=null)
+                            {
+                                mi.Result = MeasurementResult.NewOLTCSwitchingCharacterResult(mi, new PhysicalVariable[3], new PhysicalVariable[3],
+                                    new PhysicalVariable[3], Waveform, false , true);
+                                mi.state++;
+                                mi.stateText = "波形读取完成";
+                            }
+                          else
+                            {
+                                // mi.state++;
+                                mi.failed = true;
+                                mi.completed = true;  
+                                mi.stateText = "未读取到波形或者波形错误";
+                            }
+                           
+                            break;
+                        case 5:
+                           //  Thread.Sleep(1000);
+                            mi.completed = true;
+                            break;
+                    }
+                    break;
+                case MeasurementFunction.DCCharge://充电
+
+                    break;
+                case MeasurementFunction.Description:
+                    mi.completed = true;
+                    break;
+            }
+           // MeasurementResult t;
+            return null;
+        }
+
+        public static void DoWork(ref TestingWorkerSender sender)
+        {
+            DoMeasurement(ref sender.MeasurementItems[sender.CurrentItemIndex], sender.Transformer);
+            sender.StatusText = sender.MeasurementItems[sender.CurrentItemIndex].stateText;
+            if (sender.MeasurementItems[sender.CurrentItemIndex].completed) sender.CurrentItemIndex++;
+           // Thread.Sleep(6000);
+        }
+
+
+        public static void CancelWork(ref TestingWorkerSender sender)
+        {
+
+        }
+    }
+}
+

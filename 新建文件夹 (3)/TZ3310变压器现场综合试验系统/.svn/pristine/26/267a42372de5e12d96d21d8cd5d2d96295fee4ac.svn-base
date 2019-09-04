@@ -1,0 +1,87 @@
+﻿<Window x:Class="SCEEC.TTM.LocationSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SCEEC.TTM"
+        mc:Ignorable="d"
+        Style="{DynamicResource WizardForm}"
+        Title="位置管理器" Height="300" Width="500"  FontSize="18" MinHeight="300" MinWidth="400" Closing="Window_Closing" WindowStartupLocation="CenterOwner">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="Resources/location.png" Height="20" Grid.Column="0" Margin="5"/>
+            <TextBlock x:Name="TitleTextBlock" Text="位置" Grid.Column="1" Margin="5" Height="20" Style="{DynamicResource Title}"/>
+            <Button x:Name="minimumButton" Grid.Column="2" Height="35" Click="MinimumButton_Click">
+                <Image Source="Resources/minimum.png" Margin="10"/>
+            </Button>
+            <Button x:Name="maximumButton" Grid.Column="3" Height="35" Click="MaximumButton_Click">
+                <Image x:Name="maximumButtonImage" Source="Resources/maximum.png" Margin="10"/>
+            </Button>
+            <Button x:Name="closeButton" Grid.Column="4" Height="35" Click="CloseButton_Click">
+                <Image Source="Resources/close.png" Margin="10"/>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="标示信息" Grid.Row="0" Margin="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="位置名称:  " Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="NameTextBox" Grid.Column="1" Margin="5" MaxLength="127" TabIndex="0" TextChanged="TextChanged" LostKeyboardFocus="NameTextBox_LostKeyboardFocus" KeyDown="NameTextBox_KeyDown"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="详细信息" Grid.Row="1" Margin="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="公司名称:  " Grid.Row="0" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="CompanyTextBox" Grid.Row="0" Grid.Column="1" Margin="5" MaxLength="127" TabIndex="1" TextChanged="TextChanged" LostKeyboardFocus="CompanyTextBox_LostKeyboardFocus" KeyDown="CompanyTextBox_KeyDown"/>
+                    <TextBlock Text="地址:  " Grid.Row="1" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="AddressTextBox" Grid.Row="1" Grid.Column="1" Margin="5" MaxLength="127" TabIndex="2" TextChanged="TextChanged" LostKeyboardFocus="AddressTextBox_LostKeyboardFocus" KeyDown="AddressTextBox_KeyDown"/>
+                    <TextBlock Text="操作员:  " Grid.Row="2" Grid.Column="0" Margin="5"/>
+                    <TextBox x:Name="OperatorTextBox" Grid.Row="2" Grid.Column="1" Margin="5" MaxLength="127" TabIndex="3" TextChanged="TextChanged" LostKeyboardFocus="OperatorTextBox_LostKeyboardFocus" KeyDown="OperatorTextBox_KeyDown"/>
+                </Grid>
+            </GroupBox>
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="OKButton" Grid.Column="1" TabIndex="4" Click="OKButton_Click">
+                    <TextBlock Text="确认" Margin="20,10,20,10"/>
+                </Button>
+                <Button x:Name="CancelButton" Grid.Column="2" TabIndex="5" Click="CancelButton_Click">
+                    <TextBlock Text="取消" Margin="20,10,20,10"/>
+                </Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

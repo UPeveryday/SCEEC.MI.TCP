@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SCEEC.MI.TZ3310;
+
+namespace SCEEC.TTM
+{ 
+    public static class Measurement
+    {
+        public static void DoWork(ref TestingWorkerSender sender)
+        {
+            
+        }
+
+        public static bool CancelWork(ref TestingWorkerSender sender)
+        {
+
+            return true;
+        }
+    }
+}
