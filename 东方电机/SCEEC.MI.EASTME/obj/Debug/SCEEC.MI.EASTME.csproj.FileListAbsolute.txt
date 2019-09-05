@@ -16,3 +16,5 @@ C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.MI.EASTME\obj\Debug\SCEEC.MI.EASTME
 C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.MI.EASTME\obj\Debug\SCEEC.MI.EASTME.csproj.CopyComplete
 C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.MI.EASTME\obj\Debug\SCEEC.MI.EASTME.exe
 C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.MI.EASTME\obj\Debug\SCEEC.MI.EASTME.pdb
+C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.MI.EASTME\bin\Debug\SCEEC.MI.High_Precision.dll
+C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.MI.EASTME\bin\Debug\SCEEC.MI.High_Precision.pdb

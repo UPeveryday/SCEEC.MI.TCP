@@ -51,33 +51,59 @@ namespace SCEEC.MI.EASTME
 
         private void TcpServer_OtherException(object sender, AsyncEventArgs e)
         {
-            throw new NotImplementedException();
+            this.Dispatcher.BeginInvoke((Action)delegate ()
+            {
+                textBox.Text = e._msg;
+            });
         }
 
         private void TcpServer_NetError(object sender, AsyncEventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
         private void TcpServer_CompletedSend(object sender, AsyncEventArgs e)
         {
-            throw new NotImplementedException();
+            this.Dispatcher.BeginInvoke((Action)delegate ()
+            {
+                textBox.Text = "sendsuccess";
+            });
         }
 
         private void TcpServer_ClientDisconnected(object sender, AsyncEventArgs e)
         {
-            throw new NotImplementedException();
+            this.Dispatcher.BeginInvoke((Action)delegate ()
+            {
+                try
+                {
+                    textBox.Text = e._msg + "已经断开连接";
+                }
+                catch
+                {
+                }
+
+            });
         }
 
         private void TcpServer_ClientConnected(object sender, AsyncEventArgs e)
         {
-            e._state.TcpClient.Client.LocalEndPoint.ToString();//已经链接的用户
+            this.Dispatcher.BeginInvoke((Action)delegate ()
+            {
+                textBox.Text = e._state.TcpClient.Client.LocalEndPoint.ToString() + "已经连接";
+            });
+            //e._state.TcpClient.Client.LocalEndPoint.ToString();//已经链接的用户
         }
 
         private void TcpServer_DataReceived(object sender, AsyncEventArgs e)
         {
             byte[] a = e._state.Buffer;
             int length = e._state.RecLength;
+            var Temp = a.Skip(0).Take(length).ToArray();
+            TestMesseages TestMesseages = new TestMesseages(TcpServer, Temp);
+            TestMesseages.ReturnMessages();
+
+
+
             //readBytes = e._state.NetworkStream.Read(buffer, 0, buffer.Length);
             //string str = Encoding.ASCII.GetString(buffer).Substring(0, readBytes);
         }
@@ -103,8 +129,8 @@ namespace SCEEC.MI.EASTME
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
-             TestClass.SendData(new byte[] { 0x01 }, TcpServer);//发送数据到所有丛机
-         
+            TestClass.SendData(new byte[] { 0x01 }, TcpServer);//发送数据到所有丛机
+
         }
     }
 }

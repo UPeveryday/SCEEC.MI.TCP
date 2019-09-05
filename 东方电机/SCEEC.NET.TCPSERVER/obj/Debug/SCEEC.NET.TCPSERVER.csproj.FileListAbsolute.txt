@@ -4,3 +4,8 @@ C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.NET.TCPSERVER\obj\Debug\SCEEC.NET.T
 C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.NET.TCPSERVER\obj\Debug\SCEEC.NET.TCPSERVER.csproj.CoreCompileInputs.cache
 C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.NET.TCPSERVER\obj\Debug\SCEEC.NET.TCPSERVER.dll
 C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.NET.TCPSERVER\obj\Debug\SCEEC.NET.TCPSERVER.pdb
+C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.NET.TCPSERVER\bin\Debug\SCEEC.MI.High_Precision.dll
+C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.NET.TCPSERVER\bin\Debug\SCEEC.Numerics.dll
+C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.NET.TCPSERVER\bin\Debug\SCEEC.MI.High_Precision.pdb
+C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.NET.TCPSERVER\bin\Debug\SCEEC.Numerics.pdb
+C:\Users\My\Desktop\SCEEC\东方电机\SCEEC.NET.TCPSERVER\obj\Debug\SCEEC.NET.TCPSERVER.csproj.CopyComplete

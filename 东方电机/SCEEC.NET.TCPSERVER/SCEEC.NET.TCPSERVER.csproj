@@ -41,13 +41,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalysisData.cs" />
     <Compile Include="AsyncEventArgs.cs" />
     <Compile Include="AsyncTCPServer.cs" />
+    <Compile Include="ReturnMessages.cs" />
     <Compile Include="SimpleTcpClass.cs" />
     <Compile Include="TestClass.cs" />
     <Compile Include="TCPClientState.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\高精介损\高电项目\SCEEC.MI.High_Precision\SCEEC.MI.High_Precision.csproj">
+      <Project>{769d33cc-281e-4114-bfcd-d4df1bc58bde}</Project>
+      <Name>SCEEC.MI.High_Precision</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\高精介损\高电项目\SCEEC.Numerics\SCEEC.Numerics.csproj">
+      <Project>{9a4b3d86-6679-4d42-a5f3-f917dedf2261}</Project>
+      <Name>SCEEC.Numerics</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
